@@ -13,7 +13,7 @@ Then you should append 'multiuploader' to your INSTALLED_APPS and run ::
 
     $ python manage.py syncdb
 
-or, if you user South:
+or, if you use South:
 
     $ python manage.py migrate
 
@@ -89,9 +89,11 @@ Then you should render this field in your template::
     {% multiuploader_form uploadForm form.uploadedFiles.html_name "$" "fileUploads" %}
 
 In this example ``{% multiuploader_noscript form.uploadedFiles.html_name %}`` template tag loads code which shown only for browsers with javascript turned to off.
+
     ``form.uploadedFiles.html_name`` - argument to template tag defines an element name.
 
 ``{% multiuploader_form uploadForm form.uploadedFiles.html_name "fileUploads" %}`` template tag loads code which does all needed logic.
+    
     ``uploadForm`` - our multiuploader form
     ``form.uploadedFiles.html_name`` - htrml field name of MultiuploaderField (to store our files)
     ``"$"`` - the jQuery prefix (useful when you want to create multiuploader in admin panel). This parameter is optional.
