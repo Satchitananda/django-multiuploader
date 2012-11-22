@@ -61,7 +61,7 @@ Example:
 Append to your form, where you want upload files MultiuploaderField:
 
 Example:
-
+    :::python
     # Your forms.py
     
     from multiuploader.forms import MultiuploaderField
@@ -70,7 +70,7 @@ Example:
         uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
-
+    
     <form method="POST" action="" enctype="multipart/form-data">
 	{% csrf_token %}
 	<p>
