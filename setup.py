@@ -16,7 +16,7 @@ setup(
     url='http://test.ru',
     license='BSD licence, see LICENCE.txt',
     description='Adds jQuery dynamic form for uploading multiple files',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     include_package_data=True,
     requires=['django (>= 1.3)','sorl_thumbnail'],
     zip_safe=False,

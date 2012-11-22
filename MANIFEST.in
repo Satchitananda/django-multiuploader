@@ -1,4 +1,4 @@
-include AUTHORS README.md LICENCE
+include AUTHORS README.rst LICENCE
 recursive-include multiuploader *.py *.html *.js *.gif *.css
 include docs/Makefile
 recursive-include docs/source *
