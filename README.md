@@ -49,46 +49,46 @@ Create MultiUploadForm() in your views and set it to context
 
 Example:
 
-:::python
+    :::python
 
-    from django.shortcuts import render_to_response
-    from multiuploader.forms import MultiUploadForm
-    
-    def my_view(request):
-        context = {
-            'uploadForm':MultiUploadForm()
-        }
-        return render_to_response(your_template, context=context)
+        from django.shortcuts import render_to_response
+        from multiuploader.forms import MultiUploadForm
+        
+        def my_view(request):
+            context = {
+                'uploadForm':MultiUploadForm()
+            }
+            return render_to_response(your_template, context=context)
 
 Append to your form, where you want upload files MultiuploaderField:
 
 Example:
 
-:::python
+    :::python
 
-    # Your forms.py
-    
-    from multiuploader.forms import MultiuploaderField
-    class PostMessageForm(forms.Form):
-        text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
-        uploadedFiles = MultiuploaderField(required=False)
+        # Your forms.py
+        
+        from multiuploader.forms import MultiuploaderField
+        class PostMessageForm(forms.Form):
+            text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
+            uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
     
-    <form method="POST" action="" enctype="multipart/form-data">
-	{% csrf_token %}
-	<p>
-		{{ form.text }}
-		{{ form.text.errors }}
-		{{ form.uploadedFiles }}
-	</p>
-	<p>
-		{% multiuploader_noscript form.uploadedFiles.html_name %}
+        <form method="POST" action="" enctype="multipart/form-data">
+	    {% csrf_token %}
+	    <p>
+		    {{ form.text }}
+		    {{ form.text.errors }}
+		    {{ form.uploadedFiles }}
+	    </p>
+	    <p>
+		    {% multiuploader_noscript form.uploadedFiles.html_name %}
 		
-		<input id="send" type="submit" value="Отправить" class="button">
-		<a id="showUpload" type="button" class="button"><i class="attachment"></i>Прикрепить файлы</a> 
-	</p>
-    </form>
+		    <input id="send" type="submit" value="Отправить" class="button">
+		    <a id="showUpload" type="button" class="button"><i class="attachment"></i>Прикрепить файлы</a> 
+	    </p>
+        </form>
     
     {% multiuploader_form uploadForm form.uploadedFiles.html_name "$" "fileUploads" %}
 
