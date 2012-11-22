@@ -1,0 +1,27 @@
+<script type="text/javascript">
+{{ prefix }}(document).ready(function(){
+	function collectfiles(){
+		var files_inputs = '';
+		$('.filelink').each(function(i, el) { 
+			files_inputs += '<input type="hidden" value="'+$(el).attr('id')+'" name="{{ uploadedWidgetHtmlName }}"/>';
+		});
+		$("#hidden_container").append(files_inputs);
+	};
+	
+	
+	$("#{{sendButtonId}}").click(function(e){
+		{% if lock_submit %}
+			var isUploading = $(".fileupload-progressbar").is(":visible");
+			
+			if (isUploading){	
+				e.preventDefault();
+			}
+			else {
+				collectfiles();
+			}
+		{% else %}
+			collectfiles();
+		{% endif %}
+	});
+});
+</script>

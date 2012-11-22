@@ -1,0 +1,9 @@
+{% load multiuploader %}
+
+<div id="{{elementId}}">	
+	<form action="{% url multi %}" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ multiuploader_form.file }}
+		{% multiuploader_collectfiles prefix sendButtonId targetformfieldname True %}
+	</form>
+</div> 	
