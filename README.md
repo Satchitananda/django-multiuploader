@@ -19,7 +19,7 @@ or, if you use South:
 
 You must have at least Django 1.3.1 version or later.
 
-Also you need to append  'multiuploader.context_processors.booleans' to your TEMPLATE_CONTEXT_PROCESSORS.
+Also you need to append  'multiuploader.context_processors.booleans' to your ``TEMPLATE_CONTEXT_PROCESSORS``.
 
 Setup
 =====
@@ -44,7 +44,7 @@ Uploader form
 
 To upload files you should do a few simple steps:
 
-Append urlpattern (r'^your_uploads/', include('multiuploader.urls')) to your urlpatterns.
+Append ``urlpattern (r'^your_uploads/', include('multiuploader.urls'))`` to your urlpatterns.
 Create MultiUploadForm() in your views and set it to context
 
 Example:
