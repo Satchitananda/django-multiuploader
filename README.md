@@ -91,17 +91,14 @@ Then you should render this field in your template::
 
 In this example ``{% multiuploader_noscript form.uploadedFiles.html_name %}`` template tag loads code which shown only for browsers with javascript turned to off.
 
-``form.uploadedFiles.html_name`` - argument to template tag defines an element name.
+* ``form.uploadedFiles.html_name`` - argument to template tag defines an element name.
 
 ``{% multiuploader_form uploadForm form.uploadedFiles.html_name "fileUploads" %}`` template tag loads code which does all needed logic.
     
-``uploadForm`` - our multiuploader form
-    
-``form.uploadedFiles.html_name`` - htrml field name of MultiuploaderField (to store our files)
-
-``"$"`` - the jQuery prefix (useful when you want to create multiuploader in admin panel). This parameter is optional.
-    
-``"fileUploads"`` - the name of id (form container) in which you want to create form. Useful for styling.  This parameter is optional.
+* ``uploadForm`` - our multiuploader form
+* ``form.uploadedFiles.html_name`` - htrml field name of MultiuploaderField (to store our files)
+* ``"$"`` - the jQuery prefix (useful when you want to create multiuploader in admin panel). This parameter is optional
+* ``"fileUploads"`` - the name of id (form container) in which you want to create form. Useful for styling.  This parameter is optional.
 
 
 Templates
