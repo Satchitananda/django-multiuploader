@@ -1,4 +1,3 @@
-====================
 django-multiuploader
 ====================
 
@@ -7,7 +6,6 @@ django-multiuploader - is an application which enable ability to upload multiple
 
 Installation
 ============
-::
 
     $ pip install django-multiuploader
 
@@ -15,7 +13,7 @@ Then you should append 'multiuploader' to your INSTALLED_APPS and run ::
 
     $ python manage.py syncdb
 
-or, if you user South, ::
+or, if you user South:
 
     $ python manage.py migrate
 
@@ -46,10 +44,11 @@ Uploader form
 
 To upload files you should do a few simple steps:
 
-1. Append urlpattern (r'^your_uploads/', include('multiuploader.urls')) to your urlpatterns.
-2. Create MultiUploadForm() in your views and set it to context
+Append urlpattern (r'^your_uploads/', include('multiuploader.urls')) to your urlpatterns.
+Create MultiUploadForm() in your views and set it to context
 
-Example::
+Example:
+
     from django.shortcuts import render_to_response
     from multiuploader.forms import MultiUploadForm
     
@@ -59,9 +58,9 @@ Example::
         }
         return render_to_response(your_template, context=context)
 
-3. Append to your form, where you want upload files MultiuploaderField:
+Append to your form, where you want upload files MultiuploaderField:
 
-Example::
+Example:
 
     # Your forms.py
     
@@ -71,7 +70,6 @@ Example::
         uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
-    
 
     <form method="POST" action="" enctype="multipart/form-data">
 	{% csrf_token %}
@@ -90,10 +88,10 @@ Then you should render this field in your template::
     
     {% multiuploader_form uploadForm form.uploadedFiles.html_name "$" "fileUploads" %}
 
-In this example {% multiuploader_noscript form.uploadedFiles.html_name %} template tag loads code which shown only for browsers with javascript turned to off.
+In this example ``{% multiuploader_noscript form.uploadedFiles.html_name %}`` template tag loads code which shown only for browsers with javascript turned to off.
     ``form.uploadedFiles.html_name`` - argument to template tag defines an element name.
 
-{% multiuploader_form uploadForm form.uploadedFiles.html_name "fileUploads" %} template tag loads code which does all needed logic.
+``{% multiuploader_form uploadForm form.uploadedFiles.html_name "fileUploads" %}`` template tag loads code which does all needed logic.
     ``uploadForm`` - our multiuploader form
     ``form.uploadedFiles.html_name`` - htrml field name of MultiuploaderField (to store our files)
     ``"$"`` - the jQuery prefix (useful when you want to create multiuploader in admin panel). This parameter is optional.
@@ -114,6 +112,7 @@ Development
 The development is on following the repository:
 
 * https://bitbucket.org/Satchitananda/django-multiuploader
+
 
 All the feature requests, ideas, bug-reports etc. write in tracker: https://bitbucket.org/Satchitananda/django-multiuploader/issues
 
