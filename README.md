@@ -85,8 +85,8 @@ Then you should render this field in your template::
 	    <p>
 		    {% multiuploader_noscript form.uploadedFiles.html_name %}
 		
-		    <input id="send" type="submit" value="Отправить" class="button">
-		    <a id="showUpload" type="button" class="button"><i class="attachment"></i>Прикрепить файлы</a> 
+		    <input id="send" type="submit" value="Send" class="button">
+		    <a id="showUpload" type="button" class="button"><i class="attachment"></i>Attach files</a> 
 	    </p>
         </form>
     
