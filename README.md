@@ -62,13 +62,13 @@ Append to your form, where you want upload files MultiuploaderField:
 
 Example:
 
-:::python
-    # Your forms.py
-    
-    from multiuploader.forms import MultiuploaderField
-    class PostMessageForm(forms.Form):
-        text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
-        uploadedFiles = MultiuploaderField(required=False)
+    :::python
+        # Your forms.py
+        
+        from multiuploader.forms import MultiuploaderField
+        class PostMessageForm(forms.Form):
+            text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
+            uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
     
