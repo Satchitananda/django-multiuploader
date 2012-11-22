@@ -48,26 +48,30 @@ Append urlpattern (r'^your_uploads/', include('multiuploader.urls')) to your url
 Create MultiUploadForm() in your views and set it to context
 
 Example:
-    :::python
-        from django.shortcuts import render_to_response
-        from multiuploader.forms import MultiUploadForm
-        
-        def my_view(request):
-            context = {
-                'uploadForm':MultiUploadForm()
-            }
-            return render_to_response(your_template, context=context)
+
+:::python
+
+    from django.shortcuts import render_to_response
+    from multiuploader.forms import MultiUploadForm
+    
+    def my_view(request):
+        context = {
+            'uploadForm':MultiUploadForm()
+        }
+        return render_to_response(your_template, context=context)
 
 Append to your form, where you want upload files MultiuploaderField:
 
 Example:
-    :::python
-        # Your forms.py
-        
-        from multiuploader.forms import MultiuploaderField
-        class PostMessageForm(forms.Form):
-            text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
-            uploadedFiles = MultiuploaderField(required=False)
+
+:::python
+
+    # Your forms.py
+    
+    from multiuploader.forms import MultiuploaderField
+    class PostMessageForm(forms.Form):
+        text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
+        uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
     
