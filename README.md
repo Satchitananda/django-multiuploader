@@ -125,11 +125,9 @@ All the feature requests, ideas, bug-reports etc. write in tracker: https://bitb
 Additional appreciation
 =======================
 
-Sebastian Tschan for jQuery HTML5 Uploader (https://blueimp.net/).
+* Sebastian Tschan for jQuery HTML5 Uploader (https://blueimp.net/).
+* Iurii Garmash for [django multiuploader skeleton](https://github.com/garmoncheg/django_multiuploader),  which was the codebase for this app.
 
-Iurii Garmash for [django multiuploader skeleton](https://github.com/garmoncheg/django_multiuploader), which was the base.
-
-Django-jquery upload example, which was the codebase for this app.
 
 License
 =======
