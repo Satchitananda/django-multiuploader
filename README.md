@@ -1,4 +1,5 @@
-# django-multiuploader
+django-multiuploader
+====================
 
 django-multiuploader - is an application which enable ability to upload multiple files with HTML5 (jQuery plugin) in Django.
 
@@ -21,7 +22,6 @@ You must have at least Django 1.3.1 version or later.
 Also you need to append  'multiuploader.context_processors.booleans' to your ``TEMPLATE_CONTEXT_PROCESSORS``.
 
 ## Setup
-
 
 In your settings.py you may use these options to configure application:
 
@@ -111,6 +111,7 @@ In this example ``{% multiuploader_noscript form.uploadedFiles.html_name %}`` te
 * ``multiuploader/noscript.html`` - template for <noscript> case.
 
 ## Development
+
 The development is on following the repository:
 
 * https://bitbucket.org/Satchitananda/django-multiuploader
@@ -119,10 +120,12 @@ The development is on following the repository:
 All the feature requests, ideas, bug-reports etc. write in tracker: https://bitbucket.org/Satchitananda/django-multiuploader/issues
 
 ## Additional appreciation
+
 Sebastian Tschan for jQuery HTML5 Uploader (https://blueimp.net/).
 Iurii Garmash for [django multiuploader skeleton](https://github.com/garmoncheg/django_multiuploader), which was the base.
 
 Django-jquery upload example, which was the codebase for this app.
 
 ## License
+
 Released under the [MIT license](http://www.opensource.org/licenses/MIT).
