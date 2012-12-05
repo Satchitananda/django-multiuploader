@@ -1,11 +1,8 @@
-django-multiuploader
-====================
+# django-multiuploader
 
 django-multiuploader - is an application which enable ability to upload multiple files with HTML5 (jQuery plugin) in Django.
 
-
-Installation
-============
+## Installation
 
     $ pip install django-multiuploader
 
@@ -15,14 +12,16 @@ Then you should append 'multiuploader' to your INSTALLED_APPS and run ::
 
 or, if you use South:
 
-    $ python manage.py migrate
+    $ python manage.py migrate multiuploader
+
+Also, if you want previews for uploaded images you need to do syncdb for sorl.thumbnail.
 
 You must have at least Django 1.3.1 version or later.
 
 Also you need to append  'multiuploader.context_processors.booleans' to your ``TEMPLATE_CONTEXT_PROCESSORS``.
 
-Setup
-=====
+## Setup
+
 
 In your settings.py you may use these options to configure application:
 
@@ -36,8 +35,7 @@ In your settings.py you may use these options to configure application:
 
 All this parameters are optional.
 
-Usage
-=====
+## Usage
 
 Uploader form
 -------------
@@ -105,17 +103,14 @@ In this example ``{% multiuploader_noscript form.uploadedFiles.html_name %}`` te
 * ``"fileUploads"`` - the name of id (form container) in which you want to create form. Useful for styling.  This parameter is optional.
 
 
-Templates
----------
+### Templates
 
 * ``multiuploader/widget.html`` - ``MultiuploaderField`` widget template. Here you can customize look'n'feel of widget.
 * ``multiuploader/form.html`` - ``MultiUploadForm`` template.
 * ``multiuploader/collectfiles.html`` - JavaScript to collect uploaded file ids
 * ``multiuploader/noscript.html`` - template for <noscript> case.
 
-Development
-===========
-
+## Development
 The development is on following the repository:
 
 * https://bitbucket.org/Satchitananda/django-multiuploader
@@ -123,9 +118,11 @@ The development is on following the repository:
 
 All the feature requests, ideas, bug-reports etc. write in tracker: https://bitbucket.org/Satchitananda/django-multiuploader/issues
 
-Additional appreciation
-=======================
-jQuery HTML5 Uploader author (his name)
+## Additional appreciation
+Sebastian Tschan for jQuery HTML5 Uploader (https://blueimp.net/).
+Iurii Garmash for [django multiuploader skeleton](https://github.com/garmoncheg/django_multiuploader), which was the base.
+
 Django-jquery upload example, which was the codebase for this app.
 
-License - ???.
+## License
+Released under the [MIT license](http://www.opensource.org/licenses/MIT).
