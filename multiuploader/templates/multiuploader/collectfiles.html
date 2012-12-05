@@ -9,7 +9,7 @@
 	};
 	
 	
-	$("#{{sendButtonId}}").click(function(e){
+{{ prefix }}("#{{sendButtonId}}").click(function(e){
 		{% if lock_submit %}
 			var isUploading = $(".fileupload-progressbar").is(":visible");
 			

@@ -49,9 +49,6 @@ def multiuploader(request,noajax=False):
     Parses data from jQuery plugin and makes database changes.
     """
     
-    if request.method == 'GET':
-        pass
-    
     if request.method == 'POST':
         log.info('received POST to main multiuploader view')
         

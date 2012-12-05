@@ -7,6 +7,7 @@ from django.core.validators import validate_integer
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import filesizeformat
 
+
 class MultiuploadWidget(forms.MultipleHiddenInput):
     def __init__(self, attrs={}):
         super(MultiuploadWidget, self).__init__(attrs)
@@ -18,6 +19,7 @@ class MultiuploadWidget(forms.MultipleHiddenInput):
 
 class MultiuploaderField(forms.MultiValueField):
     widget = MultiuploadWidget()
+        
     def formfield(self, **kwargs):
         kwargs['widget'] = MultiuploadWidget
         return super(MultiuploaderField, self).formfield(**kwargs)
@@ -45,7 +47,11 @@ class MultiuploaderField(forms.MultiValueField):
 
 class MultiUploadFormWidget(forms.FileInput):
     template = 'multiuploader/widget.html'
-    def __init__(self, attrs={}):
+    prefix = "$"
+    
+    def __init__(self, prefix="$",attrs={}):
+        self.prefix = prefix
+        
         if not "multiple" in attrs:
             attrs["multiple"] = True
             
@@ -53,8 +59,10 @@ class MultiUploadFormWidget(forms.FileInput):
         
        
     def render(self, name, value, attrs=None):
+       
         max_usize = getattr(settings,"MAX_UPLOAD_SIZE")
         filetypes = formatFileExtensions(getattr(settings,"ALLOWED_FILE_TYPES"))
+        
         
         maxFileNumber = getattr(settings,"MAX_FILE_NUMBER") 
         
@@ -64,19 +72,30 @@ class MultiUploadFormWidget(forms.FileInput):
                                                   'field_name':name,
                                                   'maxFileSize':max_usize,
                                                   'fileTypes': filetypes,
-                                                  'maxFileNumber':maxFileNumber
+                                                  'maxFileNumber':maxFileNumber,
+                                                  'prefix':self.prefix
                                                  })
-        
+
         return mark_safe(output)
         
 class MultiUploadForm(forms.Form):
-    file = forms.FileField(widget=MultiUploadFormWidget)
+    file = forms.FileField()
     
-    def clean_file(self):
+    def __init__(self,*args,**kwargs):
+        prefix = "$"
         
+        if "prefix" in kwargs and kwargs["prefix"] != "":
+            prefix = kwargs["prefix"]
+            del kwargs["prefix"]
+        
+        super(MultiUploadForm, self).__init__(*args,**kwargs)
+        self.fields["file"].widget=MultiUploadFormWidget(prefix=prefix)
+
+        
+    def clean_file(self):
         content = self.cleaned_data[u'file']
         content_type = content.content_type.split('/')[0]
-                
+
         ctypes = getattr(settings, "CONTENT_TYPES")
         max_usize = getattr(settings,"MAX_UPLOAD_SIZE")
         
