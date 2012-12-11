@@ -1,44 +1,37 @@
-from django.shortcuts import get_object_or_404, render_to_response
-from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest,HttpResponseServerError
-from models import MultiuploaderFile
-from django.core.files.uploadedfile import UploadedFile
-
-#importing json parser to generate jQuery plugin friendly json response
-from django.utils import simplejson
-from django.core.urlresolvers import reverse
-
-#for generating thumbnails
-#sorl-thumbnails must be installed and properly configured
-from sorl.thumbnail import get_thumbnail
-from django.shortcuts import redirect
-
-from forms import MultiUploadForm
-
-
 import logging
+from django.conf import settings
+from forms import MultiUploadForm
+from django.utils import simplejson
+from models import MultiuploaderFile
+from django.shortcuts import redirect
+from sorl.thumbnail import get_thumbnail
+from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import UploadedFile
+from django.shortcuts import get_object_or_404, render_to_response
+from django.http import HttpResponse, HttpResponseBadRequest,HttpResponseServerError
+
 log = logging
 
-
-def delete_file(pk):
-    fl= get_object_or_404(MultiuploaderFile, pk=pk)
+def delete_file(id):
+    """
+    Method for temporary files removal
+    """
+    fl= get_object_or_404(MultiuploaderFile, id=id)
     fl.delete()
-    log.info('DONE. Deleted photo id='+str(pk))
+    log.info('DONE. Deleted file id='+str(id))
     
 
-def multiuploader_delete(request, pk):
+def multiuploader_delete(request, id):
     """
     View for deleting photos with multiuploader AJAX plugin.
     made from api on:
     https://github.com/blueimp/jQuery-File-Upload
     """
-    
     if request.method == 'POST':
-        log.info('Called delete file. File id='+str(pk))
-        fl= get_object_or_404(MultiuploaderFile, pk=pk)
-        fl.delete()
-        log.info('DONE. Deleted file id='+str(pk))
-        return HttpResponse(str(pk))
+        log.info('Called delete file. File id='+str(id))
+        delete_file(id);
+        log.info('DONE. Deleted file id='+str(id))
+        return HttpResponse(str(id))
     else:
         log.info('Received not POST request to delete file view')
         return HttpResponseBadRequest('Only POST accepted')

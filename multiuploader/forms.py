@@ -1,5 +1,5 @@
 from django import forms
-from django.conf import settings
+from django.conf import settings,Settings
 from utils import formatFileExtensions
 from django.utils.html import mark_safe
 from django.template.loader import render_to_string
@@ -7,6 +7,7 @@ from django.core.validators import validate_integer
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import filesizeformat
 
+DEFAULTS =  Settings("multiuploader.default_settings")
 
 class MultiuploadWidget(forms.MultipleHiddenInput):
     def __init__(self, attrs={}):
@@ -47,7 +48,6 @@ class MultiuploaderField(forms.MultiValueField):
 
 class MultiUploadFormWidget(forms.FileInput):
     template = 'multiuploader/widget.html'
-    prefix = "$"
     
     def __init__(self, prefix="$",attrs={}):
         self.prefix = prefix
@@ -59,12 +59,11 @@ class MultiUploadFormWidget(forms.FileInput):
         
        
     def render(self, name, value, attrs=None):
-       
-        max_usize = getattr(settings,"MAX_UPLOAD_SIZE")
-        filetypes = formatFileExtensions(getattr(settings,"ALLOWED_FILE_TYPES"))
+        max_usize = getattr(settings,"MAX_UPLOAD_SIZE",DEFAULTS.MAX_UPLOAD_SIZE)
+        filetypes = formatFileExtensions(getattr(settings,"ALLOWED_FILE_TYPES",DEFAULTS.ALLOWED_FILE_TYPES))
         
         
-        maxFileNumber = getattr(settings,"MAX_FILE_NUMBER") 
+        maxFileNumber = getattr(settings,"MAX_FILE_NUMBER",DEFAULTS.MAX_FILE_NUMBER) 
         
         widget_ = super(MultiUploadFormWidget, self).render(name, value, attrs)
         output = render_to_string(self.template, {
@@ -86,7 +85,7 @@ class MultiUploadForm(forms.Form):
         
         if "prefix" in kwargs and kwargs["prefix"] != "":
             prefix = kwargs["prefix"]
-            del kwargs["prefix"]
+            kwargs.pop("prefix")
         
         super(MultiUploadForm, self).__init__(*args,**kwargs)
         self.fields["file"].widget=MultiUploadFormWidget(prefix=prefix)
@@ -96,8 +95,8 @@ class MultiUploadForm(forms.Form):
         content = self.cleaned_data[u'file']
         content_type = content.content_type.split('/')[0]
 
-        ctypes = getattr(settings, "CONTENT_TYPES")
-        max_usize = getattr(settings,"MAX_UPLOAD_SIZE")
+        ctypes = getattr(settings, "CONTENT_TYPES",DEFAULTS.CONTENT_TYPES)
+        max_usize = getattr(settings,"MAX_UPLOAD_SIZE",DEFAULTS.MAX_UPLOAD_SIZE)
         
         if content_type in ctypes:
             if content._size > max_usize:

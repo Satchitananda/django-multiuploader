@@ -1,9 +1,14 @@
-{% load multiuploader %}
+{% load multiuploader staticfiles %}
 
-<div id="{{elementId}}">	
+<script type="text/javascript" src="{% static "multiuploader/scripts/collectfiles.js" %}"></script>
+
+<div id="{{ elementId }}">	
 	<form action="{% url multi %}" method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ multiuploader_form.file }}
-		{% multiuploader_collectfiles prefix sendButtonId targetformfieldname True %}
+        
+        <script type="text/javascript">		
+            setup_filecollector({{prefix}},"{{targetformfieldname}}","{{sendButtonId}}",{% if lock_while_uploading %}true{% else %}false{% endif %});
+        </script>
 	</form>
 </div> 	
