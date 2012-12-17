@@ -1,14 +1,18 @@
+import os
 import logging
-log = logging
-import os,datetime
-
+import datetime
 
 from shutil import move
-from django.conf import settings
+from datetime import timedelta
 from django.core.files import File
 from models import MultiuploaderFile
+from django.conf import settings,Settings
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
+
+log = logging
+
+DEFAULTS =  Settings("multiuploader.default_settings")
 
 
 #Getting files here
@@ -61,7 +65,10 @@ def get_uploads_from_model(fromModelEntity,filesAttrName):
     return ats
 
 def cleanAttachments(print_to_console=False):
-    for attach in MultiuploaderFile.objects.all():
+    expiration_time = getattr(settings,"EXPIRATION_TIME",DEFAULTS.EXPIRATION_TIME)
+    time_threshold = datetime.datetime.now() - timedelta(seconds=expiration_time)
+    
+    for attach in MultiuploaderFile.objects.filter(upload_date__lt=time_threshold):
         filepath = os.path.join(settings.MEDIA_ROOT,attach.file.name)      
         try:
             os.remove(filepath)
@@ -70,75 +77,6 @@ def cleanAttachments(print_to_console=False):
                 print e
 
     MultiuploaderFile.objects.all().delete()
+    
     if print_to_console:
         print "Cleaning temporary upload files complete"
-
-
-        print "IDs:",attachmentIDs
-        
-        #attachmentsStrs = attachmentStr.split(";")
-        files = MultiuploaderFile.objects.filter(id__in=attachmentIDs)
-        
-        #Moving each file to our specific directory
-        for fl in files:
-            oldpath = os.path.join(settings.MEDIA_ROOT,fl.file.name)
-            path = pathToMove
-    
-            if not os.path.isdir(path):
-                os.makedirs(path)
-
-            newpath = os.path.join(path,os.path.basename(fl.file.name))
-            move(oldpath,newpath)
-            attach = attachmentClass.objects.create(file=newpath,upload_date=fl.upload_date,key_data=fl.key_data)
-            ats.append(attach)
-            
-            #Removing old temp attachment
-            if removeFromTemp:
-                fl.delete()
-                
-    return ats
-
-def move_uploaded_files(ids,pathToMove,attachmentClass,removeFromTemp=True):
-    ats = []
-    files = MultiuploaderFile.objects.filter(id__in=ids)
-    
-    #Moving each file to our specific directory
-    for fl in files:
-        oldpath = os.path.join(settings.MEDIA_ROOT,fl.file.name)
-        path = pathToMove#os.path.join(settings.MEDIA_ROOT,settings.MESSAGE_ATTACHMENTS_PATH)
-
-        if not os.path.isdir(path):
-            os.makedirs(path)
-
-        newpath = os.path.join(path,os.path.basename(fl.file.name))
-        move(oldpath,newpath)
-        
-        attach = attachmentClass.objects.create(file=newpath,upload_date=fl.upload_date,key_data=fl.key_data)
-        ats.append(attach)
-        
-        #Removing old temp attachment
-        if removeFromTemp:
-            fl.delete()
-                
-    return ats
-
-    
-def move_files_from_model(fromModel,toAttachmentModel,filesAttrName,pathToMove,removeOld = False):
-    ats = []
-    files = getattr(fromModel,filesAttrName)
-
-    if not os.path.isdir(pathToMove):
-        os.makedirs(pathToMove)
-    
-    for fl in files:
-        oldpath = os.path.join(settings.MEDIA_ROOT,fl.file.name)
-        newpath = os.path.join(pathToMove,os.path.basename(fl.file.name))
-        move(oldpath,newpath)
-        attach = toAttachmentModel.objects.create(file=newpath,upload_date=fl.upload_date,key_data=fl.key_data)
-        ats.append(attach)
-        
-        #Remove the old
-        if removeOld:
-            fl.delete()
-            
-    return ats
