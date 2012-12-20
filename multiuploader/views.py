@@ -89,9 +89,9 @@ def multiuploader(request,noajax=False):
         result.append({"id":fl.id,
                        "name":filename, 
                        "size":file_size, 
-                       "url":reverse('multi-file-link',args=[fl.pk]),
+                       "url":reverse('multi_file_link',args=[fl.pk]),
                        "thumbnail_url":thumb_url,
-                       "delete_url":reverse('multi-delete',args=[fl.pk]),  
+                       "delete_url":reverse('multi_delete',args=[fl.pk]),  
                        "delete_type":"POST",})
         
         response_data = simplejson.dumps(result)

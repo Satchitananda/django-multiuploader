@@ -4,19 +4,20 @@ import datetime
 
 from shutil import move
 from datetime import timedelta
+
 from django.core.files import File
-from models import MultiuploaderFile
 from django.conf import settings,Settings
 from django.core.files.storage import default_storage
 from django.core.files.uploadedfile import UploadedFile
 
-log = logging
+from multiuploader import DEFAULTS
+from models import MultiuploaderFile
 
-DEFAULTS =  Settings("multiuploader.default_settings")
+log = logging
 
 
 #Getting files here
-def formatFileExtensions(extensions):
+def format_file_extensions(extensions):
     return  "/.(%s)$/i" % "|".join(extensions)
 
 def get_uploads_from_request(request):
@@ -44,7 +45,7 @@ def get_uploads_from_temp(ids):
     """Method returns of uploaded files"""
     #from django.db.models.fields.files.FieldFile 
     ats = []
-    files = MultiuploaderFile.objects.filter(id__in=ids)
+    files = MultiuploaderFile.objects.filter(pk__in=ids)
     
     #Getting THE FILES
     for fl in files:
@@ -63,20 +64,3 @@ def get_uploads_from_model(fromModelEntity,filesAttrName):
         ats.append({"file":File(fl.file),"date":fl.upload_date,"name":fl.filename})
             
     return ats
-
-def cleanAttachments(print_to_console=False):
-    expiration_time = getattr(settings,"EXPIRATION_TIME",DEFAULTS.EXPIRATION_TIME)
-    time_threshold = datetime.datetime.now() - timedelta(seconds=expiration_time)
-    
-    for attach in MultiuploaderFile.objects.filter(upload_date__lt=time_threshold):
-        filepath = os.path.join(settings.MEDIA_ROOT,attach.file.name)      
-        try:
-            os.remove(filepath)
-        except Exception as e:
-            if print_to_console:
-                print e
-
-    MultiuploaderFile.objects.all().delete()
-    
-    if print_to_console:
-        print "Cleaning temporary upload files complete"

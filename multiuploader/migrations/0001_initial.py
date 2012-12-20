@@ -10,10 +10,10 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding model 'MultiuploaderFile'
         db.create_table('multiuploader_multiuploaderfile', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('id', self.gf('django.db.models.fields.CharField')(max_length=255, primary_key=True)),
             ('filename', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('file', self.gf('django.db.models.fields.files.FileField')(max_length=255)),
-            ('upload_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2012, 12, 3, 0, 0))),
+            ('upload_date', self.gf('django.db.models.fields.DateTimeField')()),
         ))
         db.send_create_signal('multiuploader', ['MultiuploaderFile'])
 
@@ -28,8 +28,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'MultiuploaderFile'},
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '255'}),
             'filename': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'upload_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 12, 3, 0, 0)'})
+            'id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'primary_key': 'True'}),
+            'upload_date': ('django.db.models.fields.DateTimeField', [], {})
         }
     }
 

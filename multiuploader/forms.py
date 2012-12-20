@@ -1,11 +1,15 @@
+import os
+
 from django import forms
-from django.conf import settings,Settings
-from utils import formatFileExtensions
 from django.utils.html import mark_safe
+from django.conf import settings,Settings
 from django.template.loader import render_to_string
 from django.core.validators import validate_integer
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import filesizeformat
+
+from utils import format_file_extensions
+
 
 DEFAULTS =  Settings("multiuploader.default_settings")
 
@@ -30,21 +34,11 @@ class MultiuploaderField(forms.MultiValueField):
     
     def clean(self, values):
         super(MultiuploaderField,self).clean(values)
-
-        """Check if value consists only of valid integers."""
-        
-        ret = []
-        if values:
-            for id in values:
-                validate_integer(id)
-                ret.append(id)
-        
-        return ret
+        return values
         
     def compress(self,value):
         if value!=None:
             return [i for i in value]
-
 
 class MultiUploadFormWidget(forms.FileInput):
     template = 'multiuploader/widget.html'
@@ -59,8 +53,8 @@ class MultiUploadFormWidget(forms.FileInput):
         
        
     def render(self, name, value, attrs=None):
-        max_usize = getattr(settings,"MAX_UPLOAD_SIZE",DEFAULTS.MAX_UPLOAD_SIZE)
-        filetypes = formatFileExtensions(getattr(settings,"ALLOWED_FILE_TYPES",DEFAULTS.ALLOWED_FILE_TYPES))
+        max_usize = getattr(settings,"MAX_FILE_SIZE",DEFAULTS.MAX_FILE_SIZE)
+        filetypes = format_file_extensions(getattr(settings,"ALLOWED_FILE_TYPES",DEFAULTS.ALLOWED_FILE_TYPES))
         
         
         maxFileNumber = getattr(settings,"MAX_FILE_NUMBER",DEFAULTS.MAX_FILE_NUMBER) 
@@ -93,12 +87,19 @@ class MultiUploadForm(forms.Form):
         
     def clean_file(self):
         content = self.cleaned_data[u'file']
-        content_type = content.content_type.split('/')[0]
-
-        ctypes = getattr(settings, "CONTENT_TYPES",DEFAULTS.CONTENT_TYPES)
-        max_usize = getattr(settings,"MAX_UPLOAD_SIZE",DEFAULTS.MAX_UPLOAD_SIZE)
         
-        if content_type in ctypes:
+        ctypes = getattr(settings, "CONTENT_TYPES",DEFAULTS.CONTENT_TYPES)
+        max_usize = getattr(settings,"MAX_FILE_SIZE",DEFAULTS.MAX_FILE_SIZE)
+        exts = getattr(settings, "ALLOWED_FILE_TYPES",DEFAULTS.ALLOWED_FILE_TYPES)
+        
+        filename, extension = os.path.splitext(content.name)
+        extension = extension.replace(".","")
+        
+        #Checking fileextension, content-type and file size
+        if extension not in exts:
+            raise forms.ValidationError(_('File type is not supported'))
+        
+        if content.content_type in ctypes:
             if content._size > max_usize:
                 raise forms.ValidationError(_('Please keep filesize under %s. Current filesize %s') % (filesizeformat(max_usize), filesizeformat(content._size)))
         else:
