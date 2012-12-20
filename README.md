@@ -28,12 +28,11 @@ Setup
 In your settings.py you may use these options to configure application:
 
 * ALLOWED_FILE_TYPES - list of file types, allowed to upload (e.g. ["txt","zip","jpg","jpeg","flv","png"]);
-* CONTENT_TYPES - list of content types, allowed to use (e.g. ['image', 'video','document']);
+* CONTENT_TYPES - list of content types, allowed to use (e.g. ['image/jpeg', 'video/mp4','application/msword']);
 * MAX_UPLOAD_SIZE - maximum size allowed to upload (in bytes)
 * MAX_FILE_NUMBER - maximum number of files allowed to upload
-* MULTI_FILE_DELETE_URL - url to use for file removing
-* MULTI_FILE_URL - url to use for attachments, your attachments will available under this url
 * MULTI_FILES_FOLDER - media location where to store files
+* FILE_EXPIRATION_TIME - time, when the file is expired (and it can be cleaned with clean_files command).
 
 All this parameters are optional.
 
