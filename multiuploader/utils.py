@@ -3,6 +3,8 @@ import logging
 import datetime
 
 from shutil import move
+from hashlib import sha1
+from random import choice
 from datetime import timedelta
 
 from django.core.files import File
@@ -64,3 +66,17 @@ def get_uploads_from_model(fromModelEntity,filesAttrName):
         ats.append({"file":File(fl.file),"date":fl.upload_date,"name":fl.filename})
             
     return ats
+
+def generate_safe_pk(self):
+    def wrapped(self):
+        while 1:
+            skey = getattr(settings,'SECRET_KEY','asidasdas3sfvsanfja242aako;dfhdasd&asdasi&du7')
+	    pk = sha1('1%s%s' % (skey, ''.join([choice('0123456789') for i in range(11)]))).hexdigest()
+           
+            try:
+                self.__class__.objects.get(pk=pk)
+            except:
+                return pk	
+
+    return wrapped
+    
