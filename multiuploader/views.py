@@ -64,13 +64,13 @@ def multiuploader(request,noajax=False):
         filename = wrapped_file.name
         file_size = wrapped_file.file.size
         
-        log.info ('Got file: "%s"' % str(filename))
+        log.info ('Got file: "%s"' % filename)
 
         #writing file manually into model
         #because we don't need form of any type.
         
         fl = MultiuploaderFile()
-        fl.filename=str(filename)
+        fl.filename=filename
         fl.file=file
         fl.save()
         
