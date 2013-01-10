@@ -35,7 +35,7 @@ class Attachment(models.Model):
             self.upload_date = datetime.datetime.now()
 
         if not self.pk:
-            self.pk = self.generate_pk()#generate_safe_pk()
+            self.pk = self.generate_pk()
 
         super(Attachment, self).save(*args, **kwargs)
 
