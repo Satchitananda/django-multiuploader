@@ -9,11 +9,11 @@ for cmd in ('egg_info', 'develop'):
 
 setup(
     name='django-multiuploader',
-    version='0.1.0',
+    version='0.1.2',
     author=u'Sinitsin Vladimir and Ivanov Vitaly',
     author_email='vs@llc.ac; vit@nlstar.com',
     packages=find_packages(),
-    url='http://test.ru',
+    url='http://openite.com/ru/store/item/django-multiuploader.html',
     license='BSD licence, see LICENCE.txt',
     description='Adds jQuery dynamic form for uploading multiple files',
     long_description=open('README.md').read(),
