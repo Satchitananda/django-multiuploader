@@ -71,7 +71,7 @@ def generate_safe_pk(self):
     def wrapped(self):
         while 1:
             skey = getattr(settings,'SECRET_KEY','asidasdas3sfvsanfja242aako;dfhdasd&asdasi&du7')
-	    pk = sha1('%s%s' % (skey, ''.join([choice('0123456789') for i in range(11)]))).hexdigest()
+            pk = sha1('%s%s' % (skey, ''.join([choice('0123456789') for i in range(11)]))).hexdigest()
            
             try:
                 self.__class__.objects.get(pk=pk)

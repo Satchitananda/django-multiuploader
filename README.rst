@@ -12,7 +12,6 @@ Installation
     $ pip install django-multiuploader
 
 Then you should append ‘multiuploader’ to your INSTALLED\_APPS and run
-::
 
 ::
 
@@ -83,18 +82,14 @@ Example:
 
 ::
 
-    :::python
+    # Your forms.py
 
-        # Your forms.py
-
-        from multiuploader.forms import MultiuploaderField
-        class PostMessageForm(forms.Form):
-            text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
-            uploadedFiles = MultiuploaderField(required=False)
+    from multiuploader.forms import MultiuploaderField
+    class PostMessageForm(forms.Form):
+        text = forms.CharField(label=u'Вопрос', widget=forms.Textarea)
+        uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
-
-::
 
         <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
@@ -140,13 +135,7 @@ Templates
 -  ``multiuploader/form.html`` - ``MultiUploadForm`` template.
 -  ``multiuploader/collectfiles.html`` - JavaScript to collect uploaded
    file ids
--  ``multiuploader/noscript.html`` - template for
-
-   .. raw:: html
-
-      <noscript> 
-
-   case.
+-  ``multiuploader/noscript.html`` - template for noscript case.
 
 Development
 ===========
