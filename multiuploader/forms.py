@@ -1,4 +1,5 @@
 import os
+import magic
 
 from django import forms
 from django.utils import simplejson
@@ -82,7 +83,9 @@ class MultiUploadForm(forms.Form):
         if extension not in allowed_file_extensions:
             raise forms.ValidationError(_('File type is not supported'))
 
-        if content.content_type in allowed_content_types:
+        content_type = magic.from_buffer(content.read(1024), mime=True)
+
+        if content_type in allowed_content_types:
             if content._size > max_file_size:
                 raise forms.ValidationError(_('Please keep filesize under %s. Current filesize %s') % (filesizeformat(max_file_size), filesizeformat(content._size)))
         else:

@@ -16,8 +16,8 @@ setup(
     url='http://openite.com/ru/store/item/django-multiuploader.html',
     license='BSD licence, see LICENCE.txt',
     description='Adds jQuery dynamic form for uploading multiple files',
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     include_package_data=True,
-    install_requires=['django>= 1.3','sorl-thumbnail'],
+    install_requires=['django>= 1.3','sorl-thumbnail','python-magic'],
     zip_safe=False,
 )
