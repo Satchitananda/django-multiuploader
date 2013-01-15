@@ -1,6 +1,6 @@
-ALLOWED_FILE_TYPES = ["txt","zip","jpg","jpeg","flv","png"]
+MULTIUPLOADER_ALLOWED_FILE_TYPES = ["txt","zip","jpg","jpeg","flv","png"]
 
-CONTENT_TYPES = [
+MULTIUPLOADER_CONTENT_TYPES = [
                  'image/jpeg',
                  'image/png',
                  'application/msword',
@@ -16,7 +16,7 @@ CONTENT_TYPES = [
                  'text/rtf',
                 ]
 
-MAX_FILE_SIZE = 10485760
+MULTIUPLOADER_MAX_FILE_SIZE = 10485760
 # 2.5MB - 2621440
 # 5MB - 5242880
 # 10MB - 10485760
@@ -26,9 +26,9 @@ MAX_FILE_SIZE = 10485760
 # 250MB - 214958080
 # 500MB - 429916160
 
-MAX_FILE_NUMBER = 5
+MULTIUPLOADER_MAX_FILE_NUMBER = 5
 
 # Expiration time in seconds, one hour as default
-FILE_EXPIRATION_TIME = 3600
+MULTIUPLOADER_FILE_EXPIRATION_TIME = 3600
 
-MULTI_FILES_FOLDER = 'attachments'
+MULTIUPLOADER_FILES_FOLDER = 'multiuploader'

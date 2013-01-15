@@ -13,7 +13,7 @@ from django.utils.encoding import force_unicode, smart_str
 
 from multiuploader import DEFAULTS
 
-class Attachment(models.Model):
+class BaseAttachment(models.Model):
     FILE_UPLOAD_PATH = 'attachments'
 
     id = models.CharField(primary_key=True, max_length=255)
@@ -23,7 +23,7 @@ class Attachment(models.Model):
 
     def generate_pk(self):
         while 1:
-            pk = sha1('%s%s%s' % (settings.SECRET_KEY, self.filename, ''.join([choice('0123456789') for i in range(11)]))).hexdigest()
+            pk = sha1('%s%s%s' % (settings.SECRET_KEY, self.filename.encode('utf-8'), ''.join([choice('0123456789') for i in range(11)]))).hexdigest()
 
             try:
                 self.__class__.objects.get(pk=pk)
@@ -37,7 +37,7 @@ class Attachment(models.Model):
         if not self.pk:
             self.pk = self.generate_pk()
 
-        super(Attachment, self).save(*args, **kwargs)
+        super(BaseAttachment, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
@@ -52,32 +52,7 @@ def get_filename(upload_to, storage=default_storage):
         return fullname
     return _filename
 
-upload_to = getattr(settings, 'MULTI_FILES_FOLDER', DEFAULTS.MULTI_FILES_FOLDER) + '/'
+upload_to = getattr(settings, 'MULTIUPLOADER_FILES_FOLDER', DEFAULTS.MULTIUPLOADER_FILES_FOLDER) + '/'
 
-class MultiuploaderFile(Attachment):
+class MultiuploaderFile(BaseAttachment):
     FILE_UPLOAD_PATH = get_filename(upload_to=upload_to)
-
-
-'''    """Model for storing uploaded files"""
-    id = models.CharField(primary_key=True, max_length=255)
-    filename = models.CharField(max_length=255)
-    file = models.FileField(upload_to=get_filename(upload_to=upload_to), max_length=255)
-    upload_date = models.DateTimeField()
-    
-    def generate_pk(self):
-        while 1:
-            pk = sha1('%s%s%s' % (settings.SECRET_KEY, self.filename, ''.join([choice('0123456789') for i in range(11)]))).hexdigest()
-           
-            try:
-                self.__class__.objects.get(pk=pk)
-            except:
-                return pk
-    
-    def save(self, *args, **kwargs):
-        if not self.upload_date:
-            self.upload_date = datetime.datetime.now()
-        
-        if not self.pk:
-            self.pk = self.generate_pk()
-        
-        super(MultiuploaderFile, self).save(*args, **kwargs)'''

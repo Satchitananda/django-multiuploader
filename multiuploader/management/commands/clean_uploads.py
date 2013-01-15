@@ -1,7 +1,8 @@
-import datetime,datetime
+import os,datetime
 
 from datetime import timedelta
 
+from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 from multiuploader import DEFAULTS
@@ -11,7 +12,7 @@ class Command(BaseCommand):
     help = 'Clean all temporary attachments loaded to MultiuploaderFile model'
 
     def handle(self, *args, **options):
-        expiration_time = getattr(settings,"FILE_EXPIRATION_TIME",DEFAULTS.EXPIRATION_TIME)
+        expiration_time = getattr(settings, "MULTIUPLOADER_FILE_EXPIRATION_TIME", DEFAULTS.EXPIRATION_TIME)
         time_threshold = datetime.datetime.now() - timedelta(seconds=expiration_time)
         
         for attach in MultiuploaderFile.objects.filter(upload_date__lt=time_threshold):

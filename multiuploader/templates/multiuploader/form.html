@@ -1,14 +1,168 @@
-{% load multiuploader staticfiles %}
+{% load i18n multiuploader staticfiles %}
+
+{% block jQuery %}
+    <script src="{% static "multiuploader/scripts/jquery.min.js" %}"></script>
+    <script src="{% static "multiuploader/scripts/jquery-ui.min.js" %}"></script>
+    <script src="{% static "multiuploader/scripts/jquery.tmpl.min.js" %}"></script>
+{% endblock %}
+
+<script src="{% static "multiuploader/scripts/jquery.iframe-transport.js" %}"></script>
+<script src="{% static "multiuploader/scripts/jquery.fileupload.js" %}"></script>
+<script src="{% static "multiuploader/scripts/jquery.fileupload-ui.js" %}"></script>
 
 <script type="text/javascript" src="{% static "multiuploader/scripts/collectfiles.js" %}"></script>
 
-<div id="{{ elementId }}">	
-	<form action="{% url multi %}" method="POST" enctype="multipart/form-data">
+<div id="{{ wrapper_element_id }}">
+	<form action="{% url multiuploader %}" method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
-		{{ multiuploader_form.file }}
-        
-        <script type="text/javascript">		
-            setup_filecollector({{prefix}},"{{targetformfieldname}}","{{sendButtonId}}",{% if lock_while_uploading %}true{% else %}false{% endif %});
+        {% block widget %}
+            <meta charset="utf-8">
+            <link rel="stylesheet" href="{% static "multiuploader/styles/jquery.fileupload-ui.css" %}">
+
+            {% block jQueryUI_css %}
+                <link rel="stylesheet" href="{% static "multiuploader/styles/jquery-ui.css" %}" id="theme">
+            {% endblock %}
+
+            <div id="{{ target_form_fieldname }}" style="display:none;">
+                <div class="fileupload-buttonbar">
+                    <label class="fileinput-button">
+                    <span>{% trans "Append files" %}</span>
+
+                        {{ multiuploader_form.file }}
+
+                    </label>
+                <button type="button" class="delete">{% trans "Delete files" %}</button>
+            </div>
+
+            <div class="fileupload-content">
+            <table class="files"></table>
+                <div class="fileupload-progressbar"></div>
+                    <div id="help">
+                    <h2>
+                        <p>{% trans "You can choose multiple files at once, by holding Ctrl or Cmd (on Mac) button, or just Drag'n'drop files here."%}</p>
+                    </h2>
+                </div>
+               </div>
+            </div>
+
+        {% load verbatim %}
+        {% verbatim %}
+        <script id="template-upload" type="text/x-jquery-tmpl">
+                <tr class="template-upload{{if error}} ui-state-error{{/if}}">
+                <td class="preview"></td>
+                <td class="name">${name}</td>
+                <td class="size">${sizef}</td>
+        {{if error}}
+        <td class="error" colspan="2">Error:
+            {{if error === 'maxFileSize'}}File is too big
+                {{else error === 'minFileSize'}}File is too small
+                {{else error === 'acceptFileTypes'}}Filetype not allowed
+                {{else error === 'maxNumberOfFiles'}}Max number of files exceeded
+                {{else}}${error}
+                {{/if}}
+                </td>
+                    {{else}}
+                <td class="progress"><div></div></td>
+                    <td class="start"><button>Start</button></td>
+                    {{/if}}
+                    <td class="cancel"><button>Cancel</button></td>
+                    </tr>
+        </script>
+
+        <script id="template-download" type="text/x-jquery-tmpl">
+            <tr class="template-download{{if error}} ui-state-error{{/if}}">
+                {{if error}}
+                <td></td>
+                <td class="name">${name}</td>
+                <td class="size">${sizef}</td>
+                <td class="error" colspan="2">Error:
+                    {{if error === 1}}File exceeds upload_max_filesize
+                    {{else error === 2}}File exceeds MAX_FILE_SIZE (HTML form directive)
+                    {{else error === 3}}File was only partially uploaded
+                    {{else error === 4}}No File was uploaded
+                    {{else error === 5}}Missing a temporary folder
+                    {{else error === 6}}Failed to write file to disk
+                    {{else error === 7}}File upload stopped by extension
+                    {{else error === 'maxFileSize'}}File is too big
+                    {{else error === 'minFileSize'}}File is too small
+                    {{else error === 'acceptFileTypes'}}Filetype not allowed
+                    {{else error === 'maxNumberOfFiles'}}Max number of files exceeded
+                    {{else error === 'uploadedBytes'}}Uploaded bytes exceed file size
+                    {{else error === 'emptyResult'}}Empty file upload result
+                    {{else}}${error}
+                    {{/if}}
+                </td>
+                {{else}}
+                <td class="preview">
+                    {{if thumbnail_url}}
+                    <a href="${url}"><img src="${thumbnail_url}"></a>
+                    {{/if}}
+                </td>
+                <td class="name">
+                    <a id="${id}" class="filelink" href="${url}">${name}</a>
+                </td>
+                <td class="size">${sizef}</td>
+                <td colspan="2"></td>
+                {{/if}}
+                <td class="delete">
+                    <button data-type="${delete_type}" data-url="${delete_url}">Delete</button>
+                </td>
+            </tr>
+        </script>
+        {% endverbatim %}
+
+        <script type="text/javascript">
+            setup_widget({{ prefix }});
+            setup_ui({{ prefix }});
+            //console.log({{ multiuploader_form.options|safe }});
+        </script>
+
+        <script type="text/javascript">
+            (function ($) {
+                'use strict';
+
+                var multiuploaderSelector = '#{{ target_form_fieldname }}';
+
+                var opts = {{ multiuploader_form.options|safe }};
+
+                // Making new RegExp from django string
+                opts['acceptFileTypes'] = new RegExp(opts['acceptFileTypes'],"i");
+
+                // Initialize the jQuery File Upload widget:
+
+                $(multiuploaderSelector).fileupload(opts);
+
+                // Load existing files:
+                $.getJSON($(multiuploaderSelector + ' form').prop('action'), function (files) {
+                    var fu = $(multiuploaderSelector).data('fileupload');
+                    fu._adjustMaxNumberOfFiles(-files.length);
+                    fu._renderDownload(files)
+                            .appendTo($(multiuploaderSelector + ' .files'))
+                            .fadeIn(function () {
+                                // Fix for IE7 and lower:
+                                $(this).show();
+                            });
+                });
+
+                // Open download dialogs via iframes,
+                // to prevent aborting current uploads:
+
+                $(multiuploaderSelector + ' .files a:not([target^=_blank])').live('click', function (e) {
+                    e.preventDefault();
+                    $('<iframe style="display:none;"></iframe>')
+                            .prop('src', this.href)
+                            .appendTo('body');
+                });
+
+                // Making multiuploader visible
+                $(multiuploaderSelector).removeAttr("style");
+
+            })({{ prefix }});
+        </script>
+        {% endblock %}
+
+        <script type="text/javascript">
+            setup_filecollector({{ prefix }},"{{ target_form_fieldname }}","{{ send_button_selector }}",{% if lock_while_uploading %}true{% else %}false{% endif %});
         </script>
 	</form>
 </div> 	

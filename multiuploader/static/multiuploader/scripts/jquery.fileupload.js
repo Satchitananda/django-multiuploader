@@ -12,7 +12,7 @@
 /*jslint nomen: true, unparam: true, regexp: true */
 /*global document, XMLHttpRequestUpload, Blob, File, FormData, location, jQuery */
 
-(function ($) {
+setup_widget = function ($) {
     'use strict';
 
     // The fileupload widget listens for change events on file input fields
@@ -749,4 +749,4 @@
         
     });
     
-}(jQuery));
+};

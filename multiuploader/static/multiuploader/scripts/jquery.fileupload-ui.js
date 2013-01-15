@@ -14,25 +14,26 @@
 /*jslint nomen: true, unparam: true, regexp: true */
 /*global window, document, URL, webkitURL, FileReader, jQuery */
 
-function getCookie(name) {
-             var cookieValue = null;
-             if (document.cookie && document.cookie != '') {
-                 var cookies = document.cookie.split(';');
-                 for (var i = 0; i < cookies.length; i++) {
-                     var cookie = jQuery.trim(cookies[i]);
-                     // Does this cookie string begin with the name we want?
-                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                     break;
-                 }
-             }
-         }
-         return cookieValue;
-}
 
-(function ($) {
+setup_ui = function ($) {
     'use strict';
-    
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     // The UI version extends the basic fileupload widget and adds
     // a complete user interface based on the given upload/download
     // templates.
@@ -46,14 +47,14 @@ function getCookie(name) {
             autoUpload: true,
             // The following option limits the number of files that are
             // allowed to be uploaded using this widget:
-            maxNumberOfFiles: undefined,
+            maxNumberOfFiles: 10,
             // The maximum allowed file size:
-            maxFileSize: undefined,
+            maxFileSize: 1048576,
             // The minimum allowed file size:
             minFileSize: 1,
             // The regular expression for allowed file types, matches
             // against either file type or file name:
-            acceptFileTypes:  /.+$/i,
+            acceptFileTypes: /.+$/i,
             // The regular expression to define for which files a preview
             // image is shown, matched against the file type:
             previewFileTypes: /^image\/(gif|jpeg|png)$/,
@@ -80,6 +81,7 @@ function getCookie(name) {
             // See the basic file upload widget for more information:
             add: function (e, data) {
                 var that = $(this).data('fileupload');
+
                 that._adjustMaxNumberOfFiles(-data.files.length);
                 data.isAdjusted = true;
                 data.isValidated = that._validate(data.files);
@@ -106,7 +108,7 @@ function getCookie(name) {
                 }
                 if (data.context && data.dataType &&
                         data.dataType.substr(0, 6) === 'iframe') {
-                    // Iframe Transport does not support progress events.
+                    // Iframe Transport does not support progress events.undefined
                     // In lack of an indeterminate progress bar, we set
                     // the progress to 100%, showing the full animated bar:
                     data.context.find('.ui-progressbar').progressbar(
@@ -658,8 +660,7 @@ function getCookie(name) {
 
     });
 
-
-$.ajaxSetup({ 
+    $.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
              var cookieValue = null;
@@ -681,7 +682,5 @@ $.ajaxSetup({
              xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
          }
      } 
-});
-
-
-}(jQuery));
+    });
+};
