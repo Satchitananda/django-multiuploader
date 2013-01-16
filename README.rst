@@ -64,8 +64,6 @@ Example:
 
 ::
 
-    :::python
-
         from django.shortcuts import render_to_response
         from multiuploader.forms import MultiUploadForm
 
@@ -106,7 +104,8 @@ Then you should render this field in your template::
         </p>
         </form>
 
-    {% multiuploader_form uploadForm form.uploadedFiles.html_name "$" "fileUploads" %}
+
+    {% multiuploader_form uploadForm form.uploadedFiles.html_name "jQuery" "#send" "fileUploads" True %}
 
 In this example
 ``{% multiuploader_noscript form.uploadedFiles.html_name %}`` template
@@ -116,7 +115,7 @@ off.
 -  ``form.uploadedFiles.html_name`` - argument to template tag defines
    an element name.
 
-``{% multiuploader_form uploadForm form.uploadedFiles.html_name "fileUploads" %}``
+``{% multiuploader_form uploadForm form.uploadedFiles.html_name "jQuery" "#send" "fileUploads" True %}``
 template tag loads code which does all needed logic.
 
 -  ``uploadForm`` - our multiuploader form
@@ -124,17 +123,15 @@ template tag loads code which does all needed logic.
    MultiuploaderField (to store our files)
 -  ``"$"`` - the jQuery prefix (useful when you want to create
    multiuploader in admin panel). This parameter is optional
+-  ``#send`` - jQuery selector for field we should lock, while file uploading
 -  ``"fileUploads"`` - the name of id (form container) in which you want
-   to create form. Useful for styling. This parameter is optional.
+   to create form. Useful for styling. This parameter is optional
+-  ``True`` is a boolean variable which controlls whether multiuploader should lock submit while uploading or not.
 
 Templates
 ~~~~~~~~~
 
--  ``multiuploader/widget.html`` - ``MultiuploaderField`` widget
-   template. Here you can customize look’n’feel of widget.
--  ``multiuploader/form.html`` - ``MultiUploadForm`` template.
--  ``multiuploader/collectfiles.html`` - JavaScript to collect uploaded
-   file ids
+-  ``multiuploader/form.html`` - ``MultiUploadForm`` template, you can change look'n'feel here.
 -  ``multiuploader/noscript.html`` - template for noscript case.
 
 Development

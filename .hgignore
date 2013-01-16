@@ -1,10 +1,14 @@
-.pyc
-.swp
-.py~
-.hgignore~
-.html~
-.js~
-.in~
-.rst~
-.md~
+syntax: glob
+
+*.pyc
+*.swp
+*.py~
+*.hgignore~
+*.html~
+*.js~
+*.in~
+*.rst~
+*.md~
 .idea/*
+dist/*
+*.egg-info/*
