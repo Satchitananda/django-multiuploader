@@ -119,6 +119,7 @@ setup_ui = function ($) {
             },
             // Callback for successful uploads:
             done: function (e, data) {
+                console.log(data);
                 var that = $(this).data('fileupload');
                 if (data.context) {
                     data.context.each(function (index) {
@@ -149,7 +150,9 @@ setup_ui = function ($) {
             },
             // Callback for failed (abort or error) uploads:
             fail: function (e, data) {
+                console.log(data);
                 var that = $(this).data('fileupload');
+
                 that._adjustMaxNumberOfFiles(data.files.length);
                 if (data.context) {
                     data.context.each(function (index) {

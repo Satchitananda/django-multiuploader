@@ -14,10 +14,7 @@ from django.http import HttpResponse
 from django.conf import settings,Settings
 from django.core.files.uploadedfile import UploadedFile
 
-from models import MultiuploaderFile
-
 log = logging
-
 
 #Getting files here
 def format_file_extensions(extensions):
@@ -38,7 +35,6 @@ def get_uploads_from_request(request):
         for fl in request.FILES.getlist("files"):
             wrapped_file = UploadedFile(fl)
             filename = wrapped_file.name
-            #Need a bit later to calculate all file count
             file_size = wrapped_file.file.size
             attachments.append({"file":fl, "date":datetime.datetime.now(), "name":wrapped_file.name})
         
@@ -46,6 +42,8 @@ def get_uploads_from_request(request):
 
 def get_uploads_from_temp(ids):
     """Method returns of uploaded files"""
+
+    from models import MultiuploaderFile
 
     ats = []
     files = MultiuploaderFile.objects.filter(pk__in=ids)

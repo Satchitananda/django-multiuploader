@@ -1,4 +1,4 @@
 include AUTHORS README.rst LICENCE
-recursive-include multiuploader *.py *.html *.js *.gif *.png *.css
+recursive-include multiuploader *.py *.html *.js *.gif *.png *.css *.po *.mo
 include docs/Makefile
 recursive-include docs/source *
