@@ -1,11 +1,12 @@
 import logging
 from django.conf import settings
 
-
 from django.utils import simplejson
+
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpResponse, HttpResponseBadRequest,HttpResponseServerError
 
@@ -51,25 +52,25 @@ def multiuploader(request, noajax=False):
         log.info('received POST to main multiuploader view')
 
         if request.FILES == None:
-            return HttpResponseBadRequest(_('Must have files attached!'))
+            response_data = [{"error": _('Must have files attached!')}]
+            return HttpResponse(simplejson.dumps(response_data))
 
         form = MultiUploadForm(request.POST, request.FILES)
+
+
+        if not form.is_valid():
+            error = _("Unknown error")
+
+            if "file" in form._errors and len(form._errors["file"])>0:
+                error = form._errors["file"][0]
+
+            response_data = [{"error": error}]
+            return HttpResponse(simplejson.dumps(response_data))
 
         file = request.FILES[u'file']
         wrapped_file = UploadedFile(file)
         filename = wrapped_file.name
         file_size = wrapped_file.file.size
-
-
-        if not form.is_valid():
-            response_dict = {"files":[{"url":"http://jquery-file-upload.appspot.com/AMIfv960Uj76qeF-b9fJABhRSCxizbOLhaZ-wnytE3kI-pC2VGQkhsLCGqS9m1YxEdGlkYyHhs3hA3faHYScCzQcOe7A44UxwVKVlfSFmkKlFPp8VKwywZcS50t6wOfVfRhMgJuc1xAT4A0pvUSC0zIxCHqfjsNXGsiTYRNDk-NZaJdVp3pERrs/steam.jpg","name":filename,"type":"image/jpeg","size":1484458,"error":"API error 1 (images: UNSPECIFIED_ERROR)","delete_url":"http://jquery-file-upload.appspot.com/AMIfv960Uj76qeF-b9fJABhRSCxizbOLhaZ-wnytE3kI-pC2VGQkhsLCGqS9m1YxEdGlkYyHhs3hA3faHYScCzQcOe7A44UxwVKVlfSFmkKlFPp8VKwywZcS50t6wOfVfRhMgJuc1xAT4A0pvUSC0zIxCHqfjsNXGsiTYRNDk-NZaJdVp3pERrs/steam.jpg?delete=true","delete_type":"DELETE"}]}
-            #files = [{ 'url': 'http://123123', 'size': 123, 'name':filename, 'error':form._errors["file"][0]}]
-            #response_dict = {'files':files}
-            response = HttpResponse(simplejson.dumps(response_dict))
-
-
-            return response
-
 
         log.info ('Got file: "%s"' % filename)
 
