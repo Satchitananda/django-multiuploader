@@ -36,30 +36,28 @@ class MultiuploaderField(forms.MultiValueField):
         return values
 
     def compress(self,value):
-        if value!=None:
-            return [i for i in value]
+        if value:
+            return value
+
+        return None
 
 class MultiUploadForm(forms.Form):
     file = forms.FileField()
 
     def __init__(self, *args, **kwargs):
-        settings_max_file_size = getattr(settings, "MULTIUPLOADER_MAX_FILE_SIZE", DEFAULTS.MULTIUPLOADER_MAX_FILE_SIZE)
-        settings_file_types = format_file_extensions(getattr(settings,"MULTIUPLOADER_ALLOWED_FILE_TYPES", DEFAULTS.MULTIUPLOADER_ALLOWED_FILE_TYPES))
-        settings_max_file_number = getattr(settings, "MULTIUPLOADER_MAX_FILE_NUMBER", DEFAULTS.MULTIUPLOADER_MAX_FILE_NUMBER)
-        settings_allowed_content_types = getattr(settings, "MULTIUPLOADER_CONTENT_TYPES", DEFAULTS.MULTIUPLOADER_CONTENT_TYPES)
+        multiuploader_settings = getattr(settings, "MULTIUPLOADER_FORMS_SETTINGS", DEFAULTS.MULTIUPLOADER_FORMS_SETTINGS)
+
+        form_type = kwargs.pop("form_type", "default")
 
         options = {
-            'maxFileSize': settings_max_file_size,
-            'acceptFileTypes': settings_file_types,
-            'maxNumberOfFiles': settings_max_file_number,
-            'allowedContentTypes': settings_allowed_content_types
+            'maxFileSize': multiuploader_settings[form_type]["MAX_FILE_SIZE"],
+            'acceptFileTypes': format_file_extensions(multiuploader_settings[form_type]["FILE_TYPES"]),
+            'maxNumberOfFiles': multiuploader_settings[form_type]["MAX_FILE_NUMBER"],
+            'allowedContentTypes': multiuploader_settings[form_type]["CONTENT_TYPES"]
         }
 
-        user_options = kwargs.pop("options",{})
-        options.update(user_options)
-
-        self.options = simplejson.dumps(options)
         self._options = options
+        self.options = simplejson.dumps(options)
 
         super(MultiUploadForm, self).__init__(*args,**kwargs)
 
@@ -68,26 +66,19 @@ class MultiUploadForm(forms.Form):
     def clean_file(self):
         content = self.cleaned_data[u'file']
 
-        allowed_content_types = self._options["allowedContentTypes"]
-        max_file_size = self._options["maxFileSize"]
-        allowed_file_extensions = self._options["acceptFileTypes"]
-
         filename, extension = os.path.splitext(content.name)
-        extension = extension.replace(".","")
+        extension = extension.replace(".", "")
 
         #Checking fileextension, content-type and file size
-        if extension not in allowed_file_extensions:
-            raise forms.ValidationError("acceptFileTypes")
-            #raise forms.ValidationError(_('File type is not supported'))
+        if extension not in self._options['acceptFileTypes']:
+            raise forms.ValidationError('acceptFileTypes')
 
         content_type = magic.from_buffer(content.read(1024), mime=True)
 
-        if content_type in allowed_content_types:
-            if content._size > max_file_size:
+        if content_type in self._options['allowedContentTypes']:
+            if content._size > self._options['maxFileSize']:
                 raise forms.ValidationError("maxFileSize")
-                #raise forms.ValidationError(_('Please keep filesize under %(max_file_size)s. Current file size %(filesize)s') % {'max_file_size' : filesizeformat(max_file_size), 'filesize' : filesizeformat(content._size)})
         else:
             raise forms.ValidationError("acceptFileTypes")
-            #raise forms.ValidationError(_('File type is not supported'))
 
         return content

@@ -37,7 +37,9 @@
 <div id="{{ wrapper_element_id }}">
 	<form action="{% url multiuploader %}" method="POST" enctype="multipart/form-data">
 		{% csrf_token %}
+
         {% block widget %}
+        {% form_type type %}
             <meta charset="utf-8">
             {% block jQueryUI_css %}
                 <link rel="stylesheet" href="{% static "multiuploader/styles/jquery-ui.css" %}" id="theme">
@@ -48,6 +50,7 @@
                 <div class="fileupload-buttonbar">
                     <label class="fileinput-button">
                     <span>{% trans "Append files" %}</span>
+                        <!--<input id="id_file" type="file" name="file" multiple>-->
                         {{ multiuploader_form.file }}
                     </label>
                 <button type="button" class="delete">{% trans "Delete files" %}</button>
@@ -145,7 +148,9 @@
 
                 // Making new RegExp from django string
                 opts['acceptFileTypes'] = new RegExp(opts['acceptFileTypes'],"i");
-                opts['translation'] = translation;
+
+                console.log(opts);
+                //opts['translation'] = translation;
 
                 // Initialize the jQuery File Upload widget:
 
@@ -183,5 +188,6 @@
         <script type="text/javascript">
             setup_filecollector({{ prefix }},"{{ target_form_fieldname }}","{{ send_button_selector }}",{% if lock_while_uploading %}true{% else %}false{% endif %});
         </script>
+
 	</form>
 </div> 	

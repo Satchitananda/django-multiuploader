@@ -2,11 +2,11 @@ import logging
 from django.conf import settings
 
 from django.utils import simplejson
-
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
+from django.core.signing import Signer, BadSignature
 from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpResponse, HttpResponseBadRequest,HttpResponseServerError
 
@@ -18,24 +18,14 @@ from sorl.thumbnail import get_thumbnail
 
 log = logging
 
-def delete_file(pk):
-    """
-    Method for temporary files removal
-    """
-    fl = get_object_or_404(MultiuploaderFile, pk=pk)
-    fl.delete()
-    log.info('DONE. Deleted file id='+str(id))
 
 def multiuploader_delete(request, pk):
-    """
-    View for deleting photos with multiuploader AJAX plugin.
-    made from api on:
-    https://github.com/blueimp/jQuery-File-Upload
-    """
     if request.method == 'POST':
         log.info('Called delete file. File id='+str(pk))
-        delete_file(pk)
+        fl = get_object_or_404(MultiuploaderFile, pk=pk)
+        fl.delete()
         log.info('DONE. Deleted file id='+str(pk))
+
         return HttpResponse(1)
 
     else:
@@ -55,8 +45,20 @@ def multiuploader(request, noajax=False):
             response_data = [{"error": _('Must have files attached!')}]
             return HttpResponse(simplejson.dumps(response_data))
 
-        form = MultiUploadForm(request.POST, request.FILES)
+        if not u'form_type' in request.POST:
+            response_data = [{"error": _("Error when detecting form type, form_type is missing")}]
+            return HttpResponse(simplejson.dumps(response_data))
 
+        signer = Signer()
+
+        try:
+            print request.POST.get(u"form_type")
+            form_type = signer.unsign(request.POST.get(u"form_type"))
+        except BadSignature:
+            response_data = [{"error": _("Tampering detected!")}]
+            return HttpResponse(simplejson.dumps(response_data))
+
+        form = MultiUploadForm(request.POST, request.FILES, form_type=form_type)
 
         if not form.is_valid():
             error = _("Unknown error")
