@@ -12,12 +12,11 @@ from django.core.files.storage import default_storage
 from multiuploader import DEFAULTS
 from multiuploader.utils import generate_safe_pk
 
-models.options.DEFAULT_NAMES += ('upload_path', 'make_filename_safe')
 
 def get_filename(storage=default_storage):
     def _filename(instance, filename):
-        make_filename_safe = instance._meta.make_filename_safe
-        upload_path = instance._meta.upload_path
+        make_filename_safe = instance.ModelSettings.make_filename_safe
+        upload_path = instance.ModelSettings.upload_path
 
         if upload_path[-1] != '/':
             upload_path += '/'
@@ -56,6 +55,9 @@ class BaseAttachment(models.Model):
         super(BaseAttachment, self).save(*args, **kwargs)
 
     class Meta:
+        abstract = True
+
+    class ModelSettings:
         abstract = True
         make_filename_safe = True
         upload_path = getattr(settings, 'MULTIUPLOADER_FILES_FOLDER', DEFAULTS.MULTIUPLOADER_FILES_FOLDER)

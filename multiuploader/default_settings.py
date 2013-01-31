@@ -1,4 +1,11 @@
 # Expiration time in seconds, one hour as default
+
+from django.conf import settings
+
+TIME_ZONE = settings.TIME_ZONE
+LOGGING_CONFIG = settings.LOGGING_CONFIG
+
+
 MULTIUPLOADER_FILE_EXPIRATION_TIME = 3600
 
 MULTIUPLOADER_FILES_FOLDER = 'multiuploader'
