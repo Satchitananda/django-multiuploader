@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 from django.core.signing import Signer, BadSignature
 from django.core.files.uploadedfile import UploadedFile
-from django.http import HttpResponse, HttpResponseBadRequest,HttpResponseServerError
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServerError
 
 from utils import FileResponse
 from forms import MultiUploadForm
@@ -21,10 +21,10 @@ log = logging
 
 def multiuploader_delete(request, pk):
     if request.method == 'POST':
-        log.info('Called delete file. File id='+str(pk))
+        log.info('Called delete file. File id=' + str(pk))
         fl = get_object_or_404(MultiuploaderFile, pk=pk)
         fl.delete()
-        log.info('DONE. Deleted file id='+str(pk))
+        log.info('DONE. Deleted file id=' + str(pk))
 
         return HttpResponse(1)
 
@@ -41,7 +41,7 @@ def multiuploader(request, noajax=False):
     if request.method == 'POST':
         log.info('received POST to main multiuploader view')
 
-        if request.FILES == None:
+        if request.FILES is None:
             response_data = [{"error": _('Must have files attached!')}]
             return HttpResponse(simplejson.dumps(response_data))
 
@@ -52,7 +52,6 @@ def multiuploader(request, noajax=False):
         signer = Signer()
 
         try:
-            print request.POST.get(u"form_type")
             form_type = signer.unsign(request.POST.get(u"form_type"))
         except BadSignature:
             response_data = [{"error": _("Tampering detected!")}]
@@ -63,7 +62,7 @@ def multiuploader(request, noajax=False):
         if not form.is_valid():
             error = _("Unknown error")
 
-            if "file" in form._errors and len(form._errors["file"])>0:
+            if "file" in form._errors and len(form._errors["file"]) > 0:
                 error = form._errors["file"][0]
 
             response_data = [{"error": error}]
@@ -74,14 +73,14 @@ def multiuploader(request, noajax=False):
         filename = wrapped_file.name
         file_size = wrapped_file.file.size
 
-        log.info ('Got file: "%s"' % filename)
+        log.info('Got file: "%s"' % filename)
 
         #writing file manually into model
         #because we don't need form of any type.
         
         fl = MultiuploaderFile()
-        fl.filename=filename
-        fl.file=file
+        fl.filename = filename
+        fl.file = file
         fl.save()
         
         log.info('File saving done')
@@ -94,16 +93,14 @@ def multiuploader(request, noajax=False):
             log.error(e)
             
         #generating json response array
-        result = []
-        
-        result.append({"id":fl.id,
-                       "name":filename,
-                       "size":file_size, 
-                       "url": reverse('multiuploader_file_link',args=[fl.pk]),
-                       "thumbnail_url":thumb_url,
-                       "delete_url":reverse('multiuploader_delete',args=[fl.pk]),
-                       "delete_type":"POST",})
-        
+        result = [{"id": fl.id,
+                   "name": filename,
+                   "size": file_size,
+                   "url": reverse('multiuploader_file_link', args=[fl.pk]),
+                   "thumbnail_url": thumb_url,
+                   "delete_url": reverse('multiuploader_delete', args=[fl.pk]),
+                   "delete_type": "POST", }]
+
         response_data = simplejson.dumps(result)
         
         #checking for json data type
@@ -118,7 +115,7 @@ def multiuploader(request, noajax=False):
         else:
             mimetype = 'text/plain'
         return HttpResponse(response_data, mimetype=mimetype)
-    else: #GET
+    else:  # GET
         return HttpResponse('Only POST accepted')
 
 

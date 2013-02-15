@@ -12,7 +12,6 @@ from django.core.files.storage import default_storage
 from multiuploader import DEFAULTS
 from multiuploader.utils import generate_safe_pk
 
-
 def get_filename(storage=default_storage):
     def _filename(instance, filename):
         make_filename_safe = instance.ModelSettings.make_filename_safe
@@ -38,7 +37,6 @@ class BaseAttachment(models.Model):
     id = models.CharField(primary_key=True, max_length=255)
     filename = models.CharField(max_length=255, blank=False, null=False)
 
-    file = models.FileField(upload_to=get_filename(), max_length=255)
     upload_date = models.DateTimeField(default=datetime.datetime.now())
 
     @generate_safe_pk
@@ -57,10 +55,18 @@ class BaseAttachment(models.Model):
     class Meta:
         abstract = True
 
-    class ModelSettings:
-        abstract = True
-        make_filename_safe = True
+class MultiuploaderFile(BaseAttachment):
+    def _upload_to(instance, filename):
         upload_path = getattr(settings, 'MULTIUPLOADER_FILES_FOLDER', DEFAULTS.MULTIUPLOADER_FILES_FOLDER)
 
-class MultiuploaderFile(BaseAttachment):
-    pass
+        if upload_path[-1] != '/':
+            upload_path += '/'
+
+        filename = get_valid_filename(os.path.basename(filename))
+        filename, ext = os.path.splitext(filename)
+        hash = sha1(str(time.time())).hexdigest()
+        fullname = os.path.join(upload_path, "%s.%s%s" % (filename, hash, ext))
+
+        return fullname
+
+    file = models.FileField(upload_to=_upload_to, max_length=255)

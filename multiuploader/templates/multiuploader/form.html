@@ -147,7 +147,7 @@
                 var opts = {{ multiuploader_form.options|safe }};
 
                 // Making new RegExp from django string
-                opts['acceptFileTypes'] = new RegExp(opts['acceptFileTypes'],"i");
+                opts['acceptFileTypes'] = new RegExp(opts['acceptFileTypes'],'i');
 
                 console.log(opts);
                 //opts['translation'] = translation;

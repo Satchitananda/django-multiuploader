@@ -12,14 +12,16 @@ from utils import format_file_extensions
 
 from multiuploader import DEFAULTS
 
+
 class MultiuploadWidget(forms.MultipleHiddenInput):
     def __init__(self, attrs={}):
         super(MultiuploadWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
         widget_ = super(MultiuploadWidget, self).render(name, value, attrs)
-        output = '<div id="hidden_container" style="display:none;">%s</div>'%widget_
+        output = '<div id="hidden_container" style="display:none;">%s</div>' % widget_
         return mark_safe(output)
+
 
 class MultiuploaderField(forms.MultiValueField):
     widget = MultiuploadWidget()
@@ -28,18 +30,19 @@ class MultiuploaderField(forms.MultiValueField):
         kwargs['widget'] = MultiuploadWidget
         return super(MultiuploaderField, self).formfield(**kwargs)
 
-    def validate(self,values):
-        super(MultiuploaderField,self).validate(values)
+    def validate(self, values):
+        super(MultiuploaderField, self).validate(values)
 
     def clean(self, values):
-        super(MultiuploaderField,self).clean(values)
+        super(MultiuploaderField, self).clean(values)
         return values
 
-    def compress(self,value):
+    def compress(self, value):
         if value:
             return value
 
         return None
+
 
 class MultiUploadForm(forms.Form):
     file = forms.FileField()
@@ -59,9 +62,9 @@ class MultiUploadForm(forms.Form):
         self._options = options
         self.options = simplejson.dumps(options)
 
-        super(MultiUploadForm, self).__init__(*args,**kwargs)
+        super(MultiUploadForm, self).__init__(*args, **kwargs)
 
-        self.fields["file"].widget=forms.FileInput(attrs={ 'multiple': True })
+        self.fields["file"].widget = forms.FileInput(attrs={'multiple': True})
 
     def clean_file(self):
         content = self.cleaned_data[u'file']
