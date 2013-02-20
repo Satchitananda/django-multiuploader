@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-22 15:21+0700\n"
+"POT-Creation-Date: 2013-02-19 16:55+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: views.py:53
+#: models.py:76
+msgid "multiuploader file"
+msgstr "загруженный файл"
+
+#: models.py:77
+msgid "multiuploader files"
+msgstr "загруженные файлы"
+
+#: views.py:46
 msgid "Must have files attached!"
 msgstr "Сообщение должно содержать файл"
 
-#: views.py:59
+#: views.py:50
+msgid "Error when detecting form type, form_type is missing"
+msgstr ""
+
+#: views.py:58
+msgid "Tampering detected!"
+msgstr ""
+
+#: views.py:64
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
@@ -89,16 +105,16 @@ msgstr "Загрузка файла, была прервана расширен�
 msgid "Empty file upload result"
 msgstr "Пустая загрузка"
 
-#: templates/multiuploader/form.html:50
+#: templates/multiuploader/form.html:52
 #: templates/multiuploader/noscript.html:5
 msgid "Append files"
 msgstr "Прикрепить"
 
-#: templates/multiuploader/form.html:53
+#: templates/multiuploader/form.html:56
 msgid "Delete files"
 msgstr "Удалить"
 
-#: templates/multiuploader/form.html:61
+#: templates/multiuploader/form.html:64
 msgid ""
 "You can choose multiple files at once, by holding Ctrl or Cmd (on Mac) "
 "button, or just Drag'n'drop files here."

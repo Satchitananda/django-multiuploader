@@ -1,12 +1,15 @@
-import os, datetime
+import os
+import datetime
+
+import multiuploader.default_settings as DEFAULTS
 
 from datetime import timedelta
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
-from multiuploader import DEFAULTS
 from multiuploader.models import MultiuploaderFile
+
 
 class Command(BaseCommand):
     help = 'Clean all temporary attachments loaded to MultiuploaderFile model'

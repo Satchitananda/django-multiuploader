@@ -10,7 +10,7 @@ from django.template.defaultfilters import filesizeformat
 
 from utils import format_file_extensions
 
-from multiuploader import DEFAULTS
+import multiuploader.default_settings as DEFAULTS
 
 
 class MultiuploadWidget(forms.MultipleHiddenInput):
@@ -85,3 +85,7 @@ class MultiUploadForm(forms.Form):
             raise forms.ValidationError("acceptFileTypes")
 
         return content
+
+
+class MultiuploaderMultiDeleteForm(forms.Form):
+    id = MultiuploaderField()

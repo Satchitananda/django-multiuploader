@@ -11,12 +11,35 @@ from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServerError
 
 from utils import FileResponse
-from forms import MultiUploadForm
 from models import MultiuploaderFile
+from forms import MultiUploadForm, MultiuploaderMultiDeleteForm
 
 from sorl.thumbnail import get_thumbnail
 
 log = logging
+
+
+def multiuploader_delete_multiple(request, ok=False):
+    if request.method == 'POST':
+
+        form = MultiuploaderMultiDeleteForm(request.POST)
+
+        if form.is_valid():
+            return redirect(request.META.get('HTTP_REFERER', None))
+        else:
+            pass
+
+        log.info('Called delete multiple files')
+
+        """fl = get_object_or_404(MultiuploaderFile, pk=pk)
+        fl.delete()
+        log.info('DONE. Deleted file id=' + str(pk))"""
+
+        return HttpResponse(1)
+
+    else:
+        log.info('Received not POST request to delete file view')
+        return HttpResponseBadRequest('Only POST accepted')
 
 
 def multiuploader_delete(request, pk):
@@ -31,6 +54,7 @@ def multiuploader_delete(request, pk):
     else:
         log.info('Received not POST request to delete file view')
         return HttpResponseBadRequest('Only POST accepted')
+
 
 def multiuploader(request, noajax=False):
     """

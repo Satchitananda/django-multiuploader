@@ -1,9 +1,9 @@
 # Expiration time in seconds, one hour as default
 
-from django.conf import settings
+# from django.conf import settings
 
-TIME_ZONE = settings.TIME_ZONE
-LOGGING_CONFIG = settings.LOGGING_CONFIG
+# TIME_ZONE = settings.TIME_ZONE
+# LOGGING_CONFIG = settings.LOGGING_CONFIG
 
 
 MULTIUPLOADER_FILE_EXPIRATION_TIME = 3600
@@ -28,7 +28,7 @@ MULTIUPLOADER_FORMS_SETTINGS = {
                 'application/vnd.oasis.opendocument.presentation',
                 'text/plain',
                 'text/rtf',
-                ],
+                    ],
         'MAX_FILE_SIZE': 10485760,
         'MAX_FILE_NUMBER':5
     },

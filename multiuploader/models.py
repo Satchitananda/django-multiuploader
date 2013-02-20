@@ -1,6 +1,7 @@
 import os
 import time
 import datetime
+import multiuploader.default_settings as DEFAULTS
 
 from hashlib import sha1
 
@@ -8,8 +9,8 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import get_valid_filename
 from django.core.files.storage import default_storage
+from django.utils.translation import ugettext_lazy as _
 
-from multiuploader import DEFAULTS
 from multiuploader.utils import generate_safe_pk
 
 def get_filename(storage=default_storage):
@@ -37,7 +38,7 @@ class BaseAttachment(models.Model):
     id = models.CharField(primary_key=True, max_length=255)
     filename = models.CharField(max_length=255, blank=False, null=False)
 
-    upload_date = models.DateTimeField(default=datetime.datetime.now())
+    upload_date = models.DateTimeField()
 
     @generate_safe_pk
     def generate_pk(self):
@@ -70,3 +71,7 @@ class MultiuploaderFile(BaseAttachment):
         return fullname
 
     file = models.FileField(upload_to=_upload_to, max_length=255)
+
+    class Meta:
+        verbose_name = _('multiuploader file')
+        verbose_name_plural = _('multiuploader files')

@@ -148,8 +148,10 @@
 
                 // Making new RegExp from django string
                 opts['acceptFileTypes'] = new RegExp(opts['acceptFileTypes'],'i');
+                opts['maxNumberOfFiles'] = opts['maxNumberOfFiles'] - {{ number_files_attached }};
 
                 console.log(opts);
+
                 //opts['translation'] = translation;
 
                 // Initialize the jQuery File Upload widget:

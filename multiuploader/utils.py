@@ -16,9 +16,11 @@ from django.core.files.uploadedfile import UploadedFile
 
 log = logging
 
+
 #Getting files here
 def format_file_extensions(extensions):
     return  ".(%s)$" % "|".join(extensions)
+
 
 def get_uploads_from_request(request):
     """Description should be here"""
@@ -36,7 +38,7 @@ def get_uploads_from_request(request):
             wrapped_file = UploadedFile(fl)
             filename = wrapped_file.name
             file_size = wrapped_file.file.size
-            attachments.append({"file":fl, "date":datetime.datetime.now(), "name":wrapped_file.name})
+            attachments.append({"file": fl, "date": datetime.datetime.now(), "name": wrapped_file.name})
         
     return attachments
 
@@ -55,15 +57,15 @@ def get_uploads_from_temp(ids):
         
     return ats
 
-def get_uploads_from_model(fromModelEntity,filesAttrName):
+def get_uploads_from_model(instance, attr):
     """Replaces attachment files from model to a given location, 
        returns list of opened files of dict {file:'file',date:date,name:'filename'}"""
     
     ats = []
-    files = getattr(fromModelEntity,filesAttrName)
+    files = getattr(instance, attr)
 
-    for fl in files:
-        ats.append({"file":File(fl.file), "date":fl.upload_date, "name":fl.filename})
+    for fl in files.all():
+        ats.append({"file": File(fl.file), "date": fl.upload_date, "name": fl.filename})
             
     return ats
 
