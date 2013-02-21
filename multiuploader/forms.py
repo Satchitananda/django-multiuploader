@@ -1,4 +1,5 @@
 import os
+import re
 import magic
 
 from django import forms
@@ -56,7 +57,7 @@ class MultiUploadForm(forms.Form):
             'maxFileSize': multiuploader_settings[form_type]["MAX_FILE_SIZE"],
             'acceptFileTypes': format_file_extensions(multiuploader_settings[form_type]["FILE_TYPES"]),
             'maxNumberOfFiles': multiuploader_settings[form_type]["MAX_FILE_NUMBER"],
-            'allowedContentTypes': multiuploader_settings[form_type]["CONTENT_TYPES"]
+            'allowedContentTypes': map(str.lower, multiuploader_settings[form_type]["CONTENT_TYPES"])
         }
 
         self._options = options
@@ -70,15 +71,13 @@ class MultiUploadForm(forms.Form):
         content = self.cleaned_data[u'file']
 
         filename, extension = os.path.splitext(content.name)
-        extension = extension.replace(".", "")
 
-        #Checking fileextension, content-type and file size
-        if extension not in self._options['acceptFileTypes']:
+        if re.match(self._options['acceptFileTypes'], extension, flags=re.I) is None:
             raise forms.ValidationError('acceptFileTypes')
 
         content_type = magic.from_buffer(content.read(1024), mime=True)
 
-        if content_type in self._options['allowedContentTypes']:
+        if content_type.lower() in self._options['allowedContentTypes']:
             if content._size > self._options['maxFileSize']:
                 raise forms.ValidationError("maxFileSize")
         else:
