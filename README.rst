@@ -36,13 +36,14 @@ Setup
 
 In your settings.py you may use these options to configure application:
 
--  MULTIUPLOADER_FILES_FOLDER = 'multiuploader' - media location where to store files
--  MULTIUPLOADER_FILE_EXPIRATION_TIME = 3600 - time, when the file is expired (and it can
-   be cleaned with clean\_files command).
-   
-- ::
+``MULTIUPLOADER_FILES_FOLDER`` = 'multiuploader' - media location where to store files
 
-    MULTIUPLOADER_FORMS_SETTINGS = {
+``MULTIUPLOADER_FILE_EXPIRATION_TIME`` = 3600 - time, when the file is expired (and it can be cleaned with clean\_files command).
+
+``MULTIUPLOADER_FORMS_SETTINGS`` = 
+:: 
+
+    {
     'default': {
         'FILE_TYPES' : ["txt","zip","jpg","jpeg","flv","png"],
         'CONTENT_TYPES' : [
@@ -109,7 +110,10 @@ In your settings.py you may use these options to configure application:
             ],
         'MAX_FILE_SIZE': 10485760,
         'MAX_FILE_NUMBER':5
-    }} - it is a dictionary with multiple form settings. When you append a multiuploader, you can choose a preconfigured form type, which will accept only extensions and content types you've provided.
+    }} 
+    
+
+it is a dictionary with multiple form settings. When you append a multiuploader, you can choose a preconfigured form type, which will accept only extensions and content types you've provided.
 
 
 All these parameters are optional.
@@ -170,8 +174,7 @@ Then you should render this field in your template::
         </p>
         </form>
 
-
-    {% multiuploader_form form_type="default" template="multiuploader/form.html" target_form_fieldname=forms.edit.uploadedFiles.html_name js_prefix="jQuery" send_button_selector="input[name=_edit]" wrapper_element_id="fileUploads" lock_while_uploading=True number_files_attached=forms.attached_count %}
+        {% multiuploader_form form_type="default" template="multiuploader/form.html" target_form_fieldname=forms.edit.uploadedFiles.html_name js_prefix="jQuery" send_button_selector="input[name=_edit]" wrapper_element_id="fileUploads" lock_while_uploading=True number_files_attached=forms.attached_count %}
 
 In this example
 
@@ -188,7 +191,9 @@ In this example
 -  ``js_prefix`` - the jQuery prefix (useful when you want to create multiuploader in admin panel). This parameter is optional
 -  ``send_button_selector`` - jQuery selector for field we should lock, while file uploading
 -  ``wrapper_element_id`` - the name of id (form container) in which you want to create form. Useful for styling. This parameter is optional
--  ``lock_while_uploading`` is a boolean variable which controlls whether multiuploader should lock submit while uploading or not.
+-  ``lock_while_uploading`` is a boolean variable which controlls whether multiuploader should lock submit while uploading or not. This parameter is optional
+
+These parameters may used as positional too.
 
 Templates
 ~~~~~~~~~
