@@ -158,6 +158,7 @@ Example:
         uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
+
         {% load multiuploader %}
         
         <form method="POST" action="" enctype="multipart/form-data">
