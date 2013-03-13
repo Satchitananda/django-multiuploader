@@ -158,7 +158,8 @@ Example:
         uploadedFiles = MultiuploaderField(required=False)
 
 Then you should render this field in your template::
-
+        {% load multiuploader %}
+        
         <form method="POST" action="" enctype="multipart/form-data">
         {% csrf_token %}
         <p>
@@ -209,7 +210,7 @@ The development is on following the repository:
 -  https://bitbucket.org/Satchitananda/django-multiuploader
 
 All the feature requests, ideas, bug-reports etc. write in tracker:
-https://bitbucket.org/Satchitananda/django-multiuploader/issues
+-  https://bitbucket.org/Satchitananda/django-multiuploader/issues
 
 Additional appreciation
 =======================
