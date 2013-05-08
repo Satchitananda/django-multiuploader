@@ -62,7 +62,8 @@ In your settings.py you may use these options to configure application:
                 'text/rtf',
                     ],
         'MAX_FILE_SIZE': 10485760,
-        'MAX_FILE_NUMBER':5
+        'MAX_FILE_NUMBER':5,
+	'AUTO_UPLOAD': True,
     },
     'images':{
         'FILE_TYPES' : ['jpg', 'jpeg', 'png', 'gif', 'svg', 'bmp', 'tiff', 'ico' ],
@@ -77,7 +78,8 @@ In your settings.py you may use these options to configure application:
             'image/vnd.wap.wbmp',
             ],
         'MAX_FILE_SIZE': 10485760,
-        'MAX_FILE_NUMBER':5
+        'MAX_FILE_NUMBER':5,
+	'AUTO_UPLOAD': True,
     },
     'video':{
         'FILE_TYPES' : ['flv', 'mpg', 'mpeg', 'mp4' ,'avi', 'mkv', 'ogg', 'wmv', 'mov', 'webm' ],
@@ -91,7 +93,8 @@ In your settings.py you may use these options to configure application:
             'video/x-flv',
             ],
         'MAX_FILE_SIZE': 10485760,
-        'MAX_FILE_NUMBER':5
+        'MAX_FILE_NUMBER':5,
+	'AUTO_UPLOAD': True,
     },
     'audio':{
         'FILE_TYPES' : ['mp3', 'mp4', 'ogg', 'wma', 'wax', 'wav', 'webm' ],
@@ -109,7 +112,8 @@ In your settings.py you may use these options to configure application:
             'audio/webm'
             ],
         'MAX_FILE_SIZE': 10485760,
-        'MAX_FILE_NUMBER':5
+        'MAX_FILE_NUMBER':5,
+	'AUTO_UPLOAD': True,
     }} 
     
 
