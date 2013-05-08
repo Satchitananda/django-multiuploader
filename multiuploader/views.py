@@ -106,10 +106,11 @@ def multiuploader(request, noajax=False):
         fl.filename = filename
         fl.file = file
         fl.save()
-        
+
         log.info('File saving done')
 
         thumb_url = ""
+
         try:
             im = get_thumbnail(fl.file, "80x80", quality=50)
             thumb_url = im.url
