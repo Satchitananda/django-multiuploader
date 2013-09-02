@@ -13,6 +13,7 @@ from django.core.files import File
 from django.http import HttpResponse
 from django.conf import settings,Settings
 from django.core.files.uploadedfile import UploadedFile
+from django.utils.timezone import now
 
 log = logging
 
@@ -38,7 +39,7 @@ def get_uploads_from_request(request):
             wrapped_file = UploadedFile(fl)
             filename = wrapped_file.name
             file_size = wrapped_file.file.size
-            attachments.append({"file": fl, "date": datetime.datetime.now(), "name": wrapped_file.name})
+            attachments.append({"file": fl, "date": now(), "name": wrapped_file.name})
         
     return attachments
 

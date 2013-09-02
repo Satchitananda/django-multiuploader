@@ -12,6 +12,7 @@ from django.utils.safestring import mark_safe
 from django.utils.text import get_valid_filename
 from django.core.files.storage import default_storage
 from django.utils.translation import ugettext_lazy as _
+from django.utils.timezone import now
 
 
 
@@ -29,7 +30,7 @@ class BaseAttachment(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.upload_date:
-            self.upload_date = datetime.datetime.now()
+            self.upload_date = now()
 
         if not self.pk:
             self.pk = self.generate_pk()

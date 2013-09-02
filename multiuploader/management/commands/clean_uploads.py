@@ -7,6 +7,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
+from django.utils.timezone import now
 
 from multiuploader.models import MultiuploaderFile
 
@@ -16,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         expiration_time = getattr(settings, "MULTIUPLOADER_FILE_EXPIRATION_TIME", DEFAULTS.MULTIUPLOADER_FILE_EXPIRATION_TIME)
-        time_threshold = datetime.datetime.now() - timedelta(seconds=expiration_time)
+        time_threshold = now() - timedelta(seconds=expiration_time)
 
         for attach in MultiuploaderFile.objects.filter(upload_date__lt=time_threshold):
             try:
