@@ -9,7 +9,7 @@ for cmd in ('egg_info', 'develop'):
 
 setup(
     name='django-multiuploader',
-    version='0.2.5',
+    version='0.2.6',
     author=u'Sinitsin Vladimir and Ivanov Vitaly',
     author_email='vs@llc.ac; vit@nlstar.com',
     packages=find_packages(),
@@ -18,6 +18,6 @@ setup(
     description='Adds jQuery dynamic form for uploading multiple files',
     long_description=open('README.rst').read(),
     include_package_data=True,
-    install_requires=['django>= 1.3', 'sorl-thumbnail', 'python-magic'],
+    install_requires=['django>=1.4', 'sorl-thumbnail', 'python-magic'],
     zip_safe=False,
 )

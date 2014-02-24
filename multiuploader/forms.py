@@ -6,8 +6,6 @@ from django import forms
 from django.conf import settings
 from django.utils import simplejson
 from django.utils.html import mark_safe
-from django.utils.translation import ugettext_lazy as _
-from django.template.defaultfilters import filesizeformat
 
 from utils import format_file_extensions
 
@@ -18,7 +16,7 @@ class MultiuploadWidget(forms.MultipleHiddenInput):
     def __init__(self, attrs={}):
         super(MultiuploadWidget, self).__init__(attrs)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, choices=()):
         widget_ = super(MultiuploadWidget, self).render(name, value, attrs)
         output = '<div id="hidden_container" style="display:none;">%s</div>' % widget_
         return mark_safe(output)
