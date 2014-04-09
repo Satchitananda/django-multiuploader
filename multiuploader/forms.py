@@ -1,10 +1,11 @@
 import os
 import re
+import json
 import magic
 
 from django import forms
 from django.conf import settings
-from django.utils import simplejson
+
 from django.utils.html import mark_safe
 
 from utils import format_file_extensions
@@ -49,6 +50,9 @@ class MultiUploadForm(forms.Form):
     def __init__(self, *args, **kwargs):
         multiuploader_settings = getattr(settings, "MULTIUPLOADER_FORMS_SETTINGS", DEFAULTS.MULTIUPLOADER_FORMS_SETTINGS)
 
+        if 'user' in kwargs:
+            self.user = kwargs.pop("user", "")
+
         form_type = kwargs.pop("form_type", "default")
 
         options = {
@@ -60,7 +64,7 @@ class MultiUploadForm(forms.Form):
         }
 
         self._options = options
-        self.options = simplejson.dumps(options)
+        self.options = json.dumps(options)
 
         super(MultiUploadForm, self).__init__(*args, **kwargs)
 
@@ -70,6 +74,12 @@ class MultiUploadForm(forms.Form):
         content = self.cleaned_data[u'file']
 
         filename, extension = os.path.splitext(content.name)
+
+        if self.user:
+            multiuploader_settings = getattr(settings, "MULTIUPLOADER_FORMS_SETTINGS", DEFAULTS.MULTIUPLOADER_FORMS_SETTINGS)
+            admin_users = multiuploader_settings.get('admins', [])
+            if self.user in admin_users:
+                return content
 
         if re.match(self._options['acceptFileTypes'], extension, flags=re.I) is None:
             raise forms.ValidationError('acceptFileTypes')
