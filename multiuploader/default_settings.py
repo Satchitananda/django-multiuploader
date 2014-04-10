@@ -12,6 +12,8 @@ MULTIUPLOADER_FILES_FOLDER = 'multiuploader'
 
 
 MULTIUPLOADER_FORMS_SETTINGS = {
+    'CHECK_CONTENT_TYPE': True,
+    'CHECK_EXTENSION': True,
     'default': {
         'FILE_TYPES': ['jpg', 'jpeg', 'png', 'txt', 'zip', 'rar', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods', 'odp', 'rtf'],
         'CONTENT_TYPES': [
@@ -34,7 +36,8 @@ MULTIUPLOADER_FORMS_SETTINGS = {
         ],
         'MAX_FILE_SIZE': 10485760,
         'MAX_FILE_NUMBER': 5,
-        'AUTO_UPLOAD': True
+        'AUTO_UPLOAD': True,
+        'RIGHTS_CHECK_FUNCTION': None,
     },
     'images': {
         'FILE_TYPES': ['jpg', 'jpeg', 'png', 'gif', 'svg', 'bmp', 'tiff', 'ico'],
@@ -50,7 +53,8 @@ MULTIUPLOADER_FORMS_SETTINGS = {
         ],
         'MAX_FILE_SIZE': 10485760,
         'MAX_FILE_NUMBER': 5,
-        'AUTO_UPLOAD': True
+        'AUTO_UPLOAD': True,
+        'RIGHTS_CHECK_FUNCTION': None,
     },
     'video': {
         'FILE_TYPES': ['flv', 'mpg', 'mpeg', 'mp4' ,'avi', 'mkv', 'ogg', 'wmv', 'mov', 'webm'],
@@ -65,7 +69,8 @@ MULTIUPLOADER_FORMS_SETTINGS = {
         ],
         'MAX_FILE_SIZE': 10485760,
         'MAX_FILE_NUMBER': 5,
-        'AUTO_UPLOAD': True
+        'AUTO_UPLOAD': True,
+        'RIGHTS_CHECK_FUNCTION': None,
     },
     'audio': {
         'FILE_TYPES': ['mp3', 'mp4', 'ogg', 'wma', 'wax', 'wav', 'webm'],
@@ -84,6 +89,7 @@ MULTIUPLOADER_FORMS_SETTINGS = {
         ],
         'MAX_FILE_SIZE': 10485760,
         'MAX_FILE_NUMBER': 5,
-        'AUTO_UPLOAD': True
+        'AUTO_UPLOAD': True,
+        'RIGHTS_CHECK_FUNCTION': None,
     },
 }

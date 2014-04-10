@@ -44,11 +44,11 @@ def form_type(context, form_type):
 
 
 @register.simple_tag(takes_context=True)
-def multiuploader_form(context, form_type="default", template="multiuploader/form.html", target_form_fieldname=None,
+def multiuploader_form(context, form_type="default", extended_rights=False, template="multiuploader/form.html", target_form_fieldname=None,
                        js_prefix="jQuery", send_button_selector=None,
                        wrapper_element_id="", lock_while_uploading=True, number_files_attached=0):
     return render_to_string(template, {
-        'multiuploader_form': MultiUploadForm(form_type=form_type),
+        'multiuploader_form': MultiUploadForm(form_type=form_type, extended_rights=extended_rights),
         'csrf_token': context["csrf_token"],
         'type': form_type,
         'prefix': js_prefix,

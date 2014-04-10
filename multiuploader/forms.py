@@ -49,10 +49,7 @@ class MultiUploadForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         multiuploader_settings = getattr(settings, "MULTIUPLOADER_FORMS_SETTINGS", DEFAULTS.MULTIUPLOADER_FORMS_SETTINGS)
-
-        if 'user' in kwargs:
-            self.user = kwargs.pop("user", "")
-
+        self.extended_rights = kwargs.pop("extended_rights", False)
         form_type = kwargs.pop("form_type", "default")
 
         options = {
@@ -63,6 +60,15 @@ class MultiUploadForm(forms.Form):
             'autoUpload': multiuploader_settings[form_type]["AUTO_UPLOAD"]
         }
 
+        if self.extended_rights:
+            self.check_extension = False
+            self.check_content_type = False
+            options.update({'acceptFileTypes': []})
+            options.pop('allowedContentTypes')
+        else:
+            self.check_extension = multiuploader_settings[form_type]['CHECK_EXTENSION']
+            self.check_content_type = multiuploader_settings[form_type]['CHECK_CONTENT_TYPE']
+
         self._options = options
         self.options = json.dumps(options)
 
@@ -72,25 +78,19 @@ class MultiUploadForm(forms.Form):
 
     def clean_file(self):
         content = self.cleaned_data[u'file']
-
         filename, extension = os.path.splitext(content.name)
 
-        if self.user:
-            multiuploader_settings = getattr(settings, "MULTIUPLOADER_FORMS_SETTINGS", DEFAULTS.MULTIUPLOADER_FORMS_SETTINGS)
-            admin_users = multiuploader_settings.get('admins', [])
-            if self.user in admin_users:
-                return content
+        if self.check_extension:
+            if re.match(self._options['acceptFileTypes'], extension, flags=re.I) is None:
+                raise forms.ValidationError('acceptFileTypes')
 
-        if re.match(self._options['acceptFileTypes'], extension, flags=re.I) is None:
-            raise forms.ValidationError('acceptFileTypes')
-
-        content_type = magic.from_buffer(content.read(1024), mime=True)
-
-        if content_type.lower() in self._options['allowedContentTypes']:
-            if content._size > self._options['maxFileSize']:
-                raise forms.ValidationError("maxFileSize")
-        else:
-            raise forms.ValidationError("acceptFileTypes")
+        if self.check_content_type:
+            content_type = magic.from_buffer(content.read(1024), mime=True)
+            if content_type.lower() in self._options['allowedContentTypes']:
+                if content._size > self._options['maxFileSize']:
+                    raise forms.ValidationError("maxFileSize")
+            else:
+                raise forms.ValidationError("acceptFileTypes")
 
         return content
 
