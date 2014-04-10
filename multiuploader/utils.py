@@ -121,16 +121,3 @@ class FileResponse(HttpResponse):
             filename_header = 'filename*=UTF-8\'\'%s' % urllib.quote(filename.encode('utf-8'))
 
         self['Content-Disposition'] = 'attachment; ' + filename_header
-
-
-def has_extended_rights(request, form_type="default"):
-    import multiuploader.default_settings as DEFAULTS
-    from django.utils.module_loading import import_by_path
-    multiuploader_settings = getattr(settings, "MULTIUPLOADER_FORMS_SETTINGS", DEFAULTS.MULTIUPLOADER_FORMS_SETTINGS)
-    check_rights_path = multiuploader_settings.get(form_type, {}).get('RIGHTS_CHECK_FUNCTION', None)
-
-    if not check_rights_path:
-        return False
-
-    f = import_by_path(check_rights_path)
-    return f(request, form_type)

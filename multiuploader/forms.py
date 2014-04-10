@@ -49,7 +49,6 @@ class MultiUploadForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         multiuploader_settings = getattr(settings, "MULTIUPLOADER_FORMS_SETTINGS", DEFAULTS.MULTIUPLOADER_FORMS_SETTINGS)
-        self.extended_rights = kwargs.pop("extended_rights", False)
         form_type = kwargs.pop("form_type", "default")
 
         options = {
@@ -60,14 +59,16 @@ class MultiUploadForm(forms.Form):
             'autoUpload': multiuploader_settings[form_type]["AUTO_UPLOAD"]
         }
 
-        if self.extended_rights:
+        self.check_extension = True
+        self.check_content_type = True
+
+        if multiuploader_settings[form_type]["FILE_TYPES"] == '*':
             self.check_extension = False
-            self.check_content_type = False
             options.update({'acceptFileTypes': []})
+
+        if multiuploader_settings[form_type]["CONTENT_TYPES"] == '*':
+            self.check_content_type = False
             options.pop('allowedContentTypes')
-        else:
-            self.check_extension = multiuploader_settings[form_type]['CHECK_EXTENSION']
-            self.check_content_type = multiuploader_settings[form_type]['CHECK_CONTENT_TYPE']
 
         self._options = options
         self.options = json.dumps(options)

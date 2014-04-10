@@ -9,7 +9,7 @@ for cmd in ('egg_info', 'develop'):
 
 setup(
     name='django-multiuploader',
-    version='0.2.7',
+    version='0.2.9',
     author=u'Sinitsin Vladimir and Ivanov Vitaly',
     author_email='vs@llc.ac; vit@nlstar.com',
     packages=find_packages(),

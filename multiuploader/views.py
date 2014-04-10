@@ -12,8 +12,8 @@ from django.core.signing import Signer, BadSignature
 from django.core.files.uploadedfile import UploadedFile
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseServerError
 
+from utils import FileResponse
 from models import MultiuploaderFile
-from utils import FileResponse, has_extended_rights
 from forms import MultiUploadForm, MultiuploaderMultiDeleteForm
 
 from sorl.thumbnail import get_thumbnail
@@ -81,8 +81,7 @@ def multiuploader(request, noajax=False):
             response_data = [{"error": _("Tampering detected!")}]
             return HttpResponse(simplejson.dumps(response_data))
 
-        extended_rights = has_extended_rights(request)
-        form = MultiUploadForm(request.POST, request.FILES, form_type=form_type, extended_rights=extended_rights)
+        form = MultiUploadForm(request.POST, request.FILES, form_type=form_type)
 
         if not form.is_valid():
             error = _("Unknown error")
