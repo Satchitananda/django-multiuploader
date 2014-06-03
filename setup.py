@@ -18,6 +18,6 @@ setup(
     description='Adds jQuery dynamic form for uploading multiple files',
     long_description=open('README.rst').read(),
     include_package_data=True,
-    install_requires=['django>=1.4', 'sorl-thumbnail', 'python-magic'],
+    install_requires=['django>=1.4', 'sorl-thumbnail>=11.12.1b', 'python-magic'],
     zip_safe=False,
 )

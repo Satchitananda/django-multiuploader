@@ -3,7 +3,10 @@ import logging
 
 from django.conf import settings
 
-from django.utils import simplejson
+try:
+    from django.utils import simplejson as json
+except ImportError:
+    import json
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
@@ -67,11 +70,11 @@ def multiuploader(request, noajax=False):
 
         if request.FILES is None:
             response_data = [{"error": _('Must have files attached!')}]
-            return HttpResponse(simplejson.dumps(response_data))
+            return HttpResponse(json.dumps(response_data))
 
         if not u'form_type' in request.POST:
             response_data = [{"error": _("Error when detecting form type, form_type is missing")}]
-            return HttpResponse(simplejson.dumps(response_data))
+            return HttpResponse(json.dumps(response_data))
 
         signer = Signer()
 
@@ -79,7 +82,7 @@ def multiuploader(request, noajax=False):
             form_type = signer.unsign(request.POST.get(u"form_type"))
         except BadSignature:
             response_data = [{"error": _("Tampering detected!")}]
-            return HttpResponse(simplejson.dumps(response_data))
+            return HttpResponse(json.dumps(response_data))
 
         form = MultiUploadForm(request.POST, request.FILES, form_type=form_type)
 
@@ -90,7 +93,7 @@ def multiuploader(request, noajax=False):
                 error = form._errors["file"][0]
 
             response_data = [{"error": error}]
-            return HttpResponse(simplejson.dumps(response_data))
+            return HttpResponse(json.dumps(response_data))
 
         file = request.FILES[u'file']
         wrapped_file = UploadedFile(file)
@@ -126,7 +129,7 @@ def multiuploader(request, noajax=False):
                    "delete_url": reverse('multiuploader_delete', args=[fl.pk]),
                    "delete_type": "POST", }]
 
-        response_data = simplejson.dumps(result)
+        response_data = json.dumps(result)
         
         #checking for json data type
         #big thanks to Guy Shapiro
