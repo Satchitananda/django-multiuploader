@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os,shutil
 from sorl.thumbnail.management.commands import thumbnail
 from sorl.thumbnail.conf import settings
@@ -11,5 +12,5 @@ class Command(BaseCommand):
         folder = os.path.join(settings.MEDIA_ROOT,settings.THUMBNAIL_PREFIX)
         if os.path.exists(folder):
             shutil.rmtree(folder)
-            
-        print "Thumbnails cache cleaning complete."
+
+        print("Thumbnails cache cleaning complete.")

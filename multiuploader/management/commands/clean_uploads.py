@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import datetime
 
@@ -27,4 +28,4 @@ class Command(BaseCommand):
 
         MultiuploaderFile.objects.filter(upload_date__lt=time_threshold).delete()
 
-        print "Cleaning temporary upload files complete"
+        print("Cleaning temporary upload files complete")
