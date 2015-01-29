@@ -104,7 +104,7 @@ def multiuploader(request, noajax=False):
 
         #writing file manually into model
         #because we don't need form of any type.
-        
+
         fl = MultiuploaderFile()
         fl.filename = filename
         fl.file = file
@@ -119,7 +119,7 @@ def multiuploader(request, noajax=False):
             thumb_url = im.url
         except Exception as e:
             log.error(e)
-            
+
         #generating json response array
         result = [{"id": fl.id,
                    "name": filename,
@@ -130,19 +130,19 @@ def multiuploader(request, noajax=False):
                    "delete_type": "POST", }]
 
         response_data = json.dumps(result)
-        
+
         #checking for json data type
         #big thanks to Guy Shapiro
-        
+
         if noajax:
             if request.META['HTTP_REFERER']:
                 redirect(request.META['HTTP_REFERER'])
-        
+
         if "application/json" in request.META['HTTP_ACCEPT_ENCODING']:
             mimetype = 'application/json'
         else:
             mimetype = 'text/plain'
-        return HttpResponse(response_data, mimetype=mimetype)
+        return HttpResponse(response_data, content_type="{0}; charset=utf-8".format(mimetype))
     else:  # GET
         return HttpResponse('Only POST accepted')
 
