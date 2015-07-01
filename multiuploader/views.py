@@ -1,8 +1,5 @@
 import logging
 
-
-from django.conf import settings
-
 try:
     from django.utils import simplejson as json
 except ImportError:

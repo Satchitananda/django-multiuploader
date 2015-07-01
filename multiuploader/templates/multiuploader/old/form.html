@@ -1,15 +1,15 @@
 {% load i18n multiuploader staticfiles verbatim  %}
 
 {% block jQuery %}
-    <script src="{% static "multiuploader/scripts/jquery.min.js" %}"></script>
-    <script src="{% static "multiuploader/scripts/jquery-ui.min.js" %}"></script>
-    <script src="{% static "multiuploader/scripts/jquery.tmpl.min.js" %}"></script>
-    <script src="{% static "multiuploader/scripts/jquery.iframe-transport.js" %}"></script>
+    <script src="{% static "multiuploader/old/scripts/jquery.min.js" %}"></script>
+    <script src="{% static "multiuploader/old/scripts/jquery-ui.min.js" %}"></script>
+    <script src="{% static "multiuploader/old/scripts/jquery.tmpl.min.js" %}"></script>
+    <script src="{% static "multiuploader/old/scripts/jquery.iframe-transport.js" %}"></script>
 {% endblock %}
 
-<script src="{% static "multiuploader/scripts/jquery.fileupload.js" %}"></script>
-<script src="{% static "multiuploader/scripts/jquery.fileupload-ui.js" %}"></script>
-<script type="text/javascript" src="{% static "multiuploader/scripts/collectfiles.js" %}"></script>
+<script src="{% static "multiuploader/old/scripts/jquery.fileupload.js" %}"></script>
+<script src="{% static "multiuploader/old/scripts/jquery.fileupload-ui.js" %}"></script>
+<script type="text/javascript" src="{% static "multiuploader/old/scripts/collectfiles.js" %}"></script>
 
 <script type="text/javascript">
     var translation = {
@@ -42,9 +42,9 @@
         {% form_type type %}
             <meta charset="utf-8">
             {% block jQueryUI_css %}
-                <link rel="stylesheet" href="{% static "multiuploader/styles/jquery-ui.css" %}" id="theme">
+                <link rel="stylesheet" href="{% static "multiuploader/old/styles/jquery-ui.css" %}" id="theme">
             {% endblock %}
-            <link rel="stylesheet" href="{% static "multiuploader/styles/jquery.fileupload-ui.css" %}">
+            <link rel="stylesheet" href="{% static "multiuploader/old/styles/jquery.fileupload-ui.css" %}">
 
             <div id="{{ target_form_fieldname }}" style="display:none;">
                 <div class="fileupload-buttonbar">

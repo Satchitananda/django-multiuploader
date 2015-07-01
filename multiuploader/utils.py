@@ -1,26 +1,42 @@
 import os
+import time
 import urllib
 import logging
-import datetime
 import mimetypes
-
-from wsgiref.util import FileWrapper
 
 from hashlib import sha1
 from random import choice
+from wsgiref.util import FileWrapper
 
+from django.conf import settings
 from django.core.files import File
 from django.http import HttpResponse
-from django.conf import settings,Settings
-from django.core.files.uploadedfile import UploadedFile
 from django.utils.timezone import now
+from django.utils.text import get_valid_filename
+from django.core.files.uploadedfile import UploadedFile
+
+
+import multiuploader.default_settings as DEFAULTS
 
 log = logging
 
 
-#Getting files here
+# Getting files here
 def format_file_extensions(extensions):
-    return  ".(%s)$" % "|".join(extensions)
+    return ".(%s)$" % "|".join(extensions)
+
+
+def _upload_to(filename):
+    upload_path = getattr(settings, 'MULTIUPLOADER_FILES_FOLDER', DEFAULTS.MULTIUPLOADER_FILES_FOLDER)
+
+    if upload_path[-1] != '/':
+        upload_path += '/'
+
+    filename = get_valid_filename(os.path.basename(filename))
+    filename, ext = os.path.splitext(filename)
+    hash = sha1(str(time.time())).hexdigest()
+    fullname = os.path.join(upload_path, "%s.%s%s" % (filename, hash, ext))
+    return fullname
 
 
 def get_uploads_from_request(request):
