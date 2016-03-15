@@ -40,6 +40,8 @@ In your settings.py you may use these options to configure application:
 
 ``MULTIUPLOADER_FILE_EXPIRATION_TIME`` = 3600 - time, when the file is expired (and it can be cleaned with clean\_files command).
 
+::
+
     MULTIUPLOADER_FORMS_SETTINGS = 
     {
     'default': {
