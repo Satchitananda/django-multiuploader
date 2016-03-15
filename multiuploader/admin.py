@@ -5,7 +5,7 @@ from django.forms.widgets import ClearableFileInput
 from django.contrib.admin.widgets import AdminFileWidget
 
 
-from multiuploader.models import MultiuploaderFile
+from .models import MultiuploaderFile
 
 
 """class MultiuploaderAdminFileWidget(AdminFileWidget):
